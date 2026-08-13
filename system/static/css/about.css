@@ -1,0 +1,80 @@
+body {
+    background: #fff5f5; /* halka golapi background */
+    font-family: 'Arial', sans-serif;
+}
+.about-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #fff5f5;
+}
+.about-container h2 {
+    color: #222;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+.breadcrumb {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Mission + Image Section */
+.about-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+.about-text { flex: 1; }
+.about-text h3 {
+    color: #c62828; /* Lal color */
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+.about-text p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+}
+.about-img img {
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Stats Card Section */
+.stats-card {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 25px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(198, 40, 40, 0.08);
+}
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    justify-content: center;
+    border-right: 1px solid #eee;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item span { font-size: 28px; }
+.stat-item h4 {
+    color: #c62828;
+    font-size: 22px;
+    margin: 0;
+}
+.stat-item p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.stat-item span img {
+    width: 35px;
+    height: 35px;
+}

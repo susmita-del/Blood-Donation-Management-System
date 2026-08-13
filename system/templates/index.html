@@ -1,0 +1,105 @@
+
+ {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blood Donation Management System</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    {% include 'header.html' %}
+
+
+    <!-- Home Page Content -->
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                Donate Blood <br>
+                Save Lives
+            </h1>
+
+            <p>
+                Every drop of blood is a gift of life.
+                Your one donation can save many lives.
+            </p>
+
+            <div class="hero-btn">
+
+                <a href="#" class="donor-btn">
+                    Become a Donor
+                </a>
+
+                <a href="#" class="request-btn">
+                    Request Blood
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+
+            <img src="{% static 'images/images.jpg' %}"
+                 alt="Blood Donation">
+
+        </div>
+
+    </section>
+
+
+    <section class="feature">
+
+        <div class="card">
+            <i class="fa-solid fa-users"></i>
+
+            <h3>Find Donor</h3>
+
+            <p>
+                Search blood donors according to your blood group.
+            </p>
+        </div>
+
+
+        <div class="card">
+            <i class="fa-solid fa-droplet"></i>
+
+            <h3>Request Blood</h3>
+
+            <p>
+                Send blood request during emergency situations.
+            </p>
+        </div>
+
+
+        <div class="card">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+
+            <h3>Save Life</h3>
+
+            <p>
+                Become a donor and help someone survive.
+            </p>
+        </div>
+
+    </section>
+
+
+    {% include 'footer.html' %}
+
+</body>
+
+</html>
