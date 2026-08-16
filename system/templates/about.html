@@ -1,0 +1,52 @@
+{% load static %}
+{% include 'header.html' %}
+
+
+
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<div class="about-container">
+    <h2>About Us</h2>
+    <p class="breadcrumb">Home > About Us</p>
+
+    <div class="about-section">
+        <div class="about-text">
+            <h3>Our Mission</h3>
+            <p>To build a reliable and easy-to-use platform 
+            that connects blood donors with people in need 
+            and saves lives through timely donations.</p>
+        </div>
+        <div class="about-img">
+            <img src="{% static 'images/about.jpg' %}" alt="Blood Donation">
+        </div>
+    </div>
+
+    <div class="stats-card">
+        <div class="stat-item">
+    <span><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Donors"></span>
+    <div>
+        <h4>1000+</h4>
+        <p>Registered Donors</p>
+    </div>
+</div>
+<div class="stat-item">
+    <span><img src="https://cdn-icons-png.flaticon.com/512/2965/2965860.png" alt="Requests"></span>
+    <div>
+        <h4>500+</h4>
+        <p>Blood Requests</p>
+    </div>
+</div>
+<div class="stat-item">
+    <span><img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Lives"></span>
+    <div>
+        <h4>200+</h4>
+        <p>Lives Saved</p>
+    </div>
+</div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

@@ -1,0 +1,57 @@
+ {% load static %}
+{% include 'header.html' %}
+
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+
+
+
+<div class="contact-container">
+    <h2>Contact Us</h2>
+    <p class="breadcrumb">Home > Contact</p>
+
+    <div class="contact-wrapper">
+        <!-- Left Side: Address Info -->
+        <div class="contact-info">
+            <div class="info-item">
+                <span><img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Address"></span>
+                <div>
+                    <h4>Address</h4>
+                    <p>123 Health Street, Kolkata, India</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <span><img src="https://cdn-icons-png.flaticon.com/512/542/542638.png" alt="Email"></span>
+                <div>
+                    <h4>Email</h4>
+                    <p>info@blooddonation.com</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <span><img src="https://cdn-icons-png.flaticon.com/512/455/455705.png" alt="Phone"></span>
+                <div>
+                    <h4>Phone</h4>
+                    <p>+91 98765 43210</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Contact Form -->
+        <div class="contact-form">
+            <h3>Send Us a Message</h3>
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <textarea name="message" placeholder="Message" rows="5" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
