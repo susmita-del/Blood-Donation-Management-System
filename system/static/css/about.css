@@ -1,5 +1,7 @@
+
+
 body {
-    background: #fff5f5; /* halka golapi background */
+    background: #fff5f5; 
     font-family: 'Arial', sans-serif;
 }
 .about-container {
@@ -19,7 +21,12 @@ body {
     margin-bottom: 30px;
 }
 
+
+
+
+
 /* Mission + Image Section */
+
 .about-section {
     display: flex;
     justify-content: space-between;
@@ -27,9 +34,11 @@ body {
     gap: 40px;
     margin-bottom: 40px;
 }
-.about-text { flex: 1; }
+.about-text { 
+    flex: 1; 
+}
 .about-text h3 {
-    color: #c62828; /* Lal color */
+    color: #c62828; 
     font-size: 24px;
     margin-bottom: 15px;
 }
@@ -61,8 +70,14 @@ body {
     justify-content: center;
     border-right: 1px solid #eee;
 }
-.stat-item:last-child { border-right: none; }
-.stat-item span { font-size: 28px; }
+.stat-item:last-child {
+     border-right: none; 
+    }
+
+.stat-item span {
+     font-size: 28px; 
+    }
+    
 .stat-item h4 {
     color: #c62828;
     font-size: 22px;

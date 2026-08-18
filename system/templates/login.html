@@ -1,7 +1,47 @@
+ 
+ {% load static %}
+ 
  {% include 'header.html' %}
 
+ <link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
 
- 
- {% include 'footer.html' %}
+
+<div class="login-container">
+    <h2>Login</h2>
+    <p class="breadcrumb">Home > Login</p>
+
+    <div class="login-wrapper">
+      
+        <div class="login-left">
+            <img src="{% static 'images/b-drop.jpg' %}" alt="Blood Drop">
+            <h3>Welcome Back!</h3>
+            <p>Login to access your dashboard <br> and manage your blood donation activities.</p>
+        </div>
+
+
+        <div class="login-right">
+            {% if error %}<p class="error">{{ error }}</p>{% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                
+                <div class="form-row">
+                    <label><input type="checkbox" name="remember"> Remember Me</label>
+                    <a href="/forgot-password/">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-submit">Login</button>
+                
+                <p class="register-link">Don't have an account? <a href="/register/">Register</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
