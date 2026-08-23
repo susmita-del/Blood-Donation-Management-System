@@ -1,0 +1,16 @@
+# Virtual environment
+blood/
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+db.sqlite3
+
+# Environment variables
+.env
