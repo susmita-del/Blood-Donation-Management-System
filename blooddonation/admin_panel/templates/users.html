@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% block title %}Admin{% endblock %}{% block crumb %}Admin{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Users</h1><p>Manage user accounts and access.</p></div></div>
+<form class="filters" method="get"><input name="q" value="{{ q }}" placeholder="Search username, name, email..."><button class="btn primary">Search</button></form>
+<div class="card table-card"><table><thead><tr><th>User</th><th>Email</th><th>Joined</th><th>Staff</th><th>Status</th><th>Action</th></tr></thead><tbody>{% for u in users %}<tr><td><b>{{ u.get_full_name|default:u.username }}</b><small>@{{ u.username }}</small></td><td>{{ u.email|default:"—" }}</td><td>{{ u.date_joined|date:"d M Y" }}</td><td>{% if u.is_staff %}Yes{% else %}No{% endif %}</td><td><span class="badge {% if u.is_active %}success{% else %}danger{% endif %}">{% if u.is_active %}Active{% else %}Inactive{% endif %}</span></td><td>{% if u != request.user %}<form method="post" action="{% url 'admin_panel:toggle_user' u.pk %}">{% csrf_token %}<button class="btn small">{% if u.is_active %}Disable{% else %}Enable{% endif %}</button></form>{% else %}<small>Current admin</small>{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

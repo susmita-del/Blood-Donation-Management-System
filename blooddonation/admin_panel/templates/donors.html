@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% block title %}Manage Donors{% endblock %}{% block crumb %}Manage Donors{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Manage Donors</h1><p>Search and manage registered blood donors.</p></div></div>
+<form class="filters" method="get"><input name="q" value="{{ q }}" placeholder="Search donor, city..."><select name="blood_group"><option value="">All blood groups</option>{% for value,label in groups %}<option value="{{ value }}" {% if selected_group == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><select name="available"><option value="">All availability</option><option value="yes" {% if available == 'yes' %}selected{% endif %}>Available</option></select><button class="btn primary">Search</button></form>
+<div class="card table-card"><table><thead><tr><th>Donor</th><th>Blood Group</th><th>Phone</th><th>Location</th><th>Availability</th><th>Action</th></tr></thead><tbody>{% for donor in donors %}<tr><td><b>{{ donor.user.get_full_name|default:donor.user.username }}</b><small>{{ donor.user.email }}</small></td><td><span class="blood">{{ donor.blood_group }}</span></td><td>{{ donor.phone|default:"—" }}</td><td>{{ donor.city|default:"—" }}, {{ donor.state|default:"" }}</td><td><span class="badge {% if donor.available_to_donate %}success{% else %}danger{% endif %}">{% if donor.available_to_donate %}Available{% else %}Unavailable{% endif %}</span></td><td><a class="btn small" href="{% url 'admin_panel:donor_detail' donor.pk %}">View</a></td></tr>{% empty %}<tr><td colspan="6" class="empty">No donors found.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

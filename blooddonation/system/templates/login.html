@@ -8,7 +8,22 @@
 <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-
+  {% if messages %}
+      {% for message in messages %}
+        <div style="background-color: #fce4ec;
+          color: #8b1e3f;
+          border-bottom: 1px solid #e5a9bb;
+          border: 1px solid #f5c2c7;
+          padding: 12px 20px;
+          font-size: 15px;
+          text-align: center;
+          font-weight: 600;
+          box-sizing: border-box;
+          width: 100%;">
+          {{ message }}
+        </div>
+       {% endfor %}
+    {% endif %}
 
 
 <div class="login-container">
@@ -26,11 +41,15 @@
 
         <div class="login-right">
             {% if error %}<p class="error">{{ error }}</p>{% endif %}
-            <form method="post">
+            <form method="POST" action="{% url 'admin_panel:login' %}">
                 {% csrf_token %}
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
                 
+                {% comment %} ADD {% endcomment %}
+                {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                {% endif %}
+                <input type="text" name="username_or_email" placeholder="Enter username or Email" required>
+                <input type="password" name="password" placeholder=" Enter Password" required>
                 <div class="form-row">
                     <label><input type="checkbox" name="remember"> Remember Me</label>
                     <a href="/forgot-password/">Forgot Password?</a>

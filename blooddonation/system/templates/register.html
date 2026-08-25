@@ -26,7 +26,7 @@
             {% if error %}<p class="error">{{ error }}</p>{% endif %}
             {% if success %}<p class="success">{{ success }}</p>{% endif %}
             
-            <form method="post">
+            <form method="POST">
                 {% csrf_token %}
                 <input type="text" name="full_name" placeholder="Full Name" required>
                 <input type="email" name="email" placeholder="Email" required>

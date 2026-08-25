@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% block title %}Approved Requests{% endblock %}{% block crumb %}Approved Requests{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Approved Requests</h1><p>Requests that have been approved by the administrator.</p></div></div>
+<div class="card table-card"><table><thead><tr><th>Patient</th><th>Blood Group</th><th>Hospital</th><th>Urgency</th><th>Approved At</th></tr></thead><tbody>{% for r in requests %}<tr><td><b>{{ r.patient_name }}</b><small>{{ r.requester.username }}</small></td><td><span class="blood">{{ r.blood_group }}</span></td><td>{{ r.hospital_name }}<small>{{ r.city }}</small></td><td><span class="urgency {{ r.urgency|lower }}">{{ r.urgency }}</span></td><td>{{ r.reviewed_at|date:"d M Y, h:i A" }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No approved requests.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

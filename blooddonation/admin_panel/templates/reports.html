@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% block title %}Reports{% endblock %}{% block crumb %}Reports{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Statistics & Reports</h1><p>Blood donation system summary.</p></div></div>
+<div class="stats"><div class="stat"><span class="stat-icon"><i class="fa-solid fa-users"></i></span><div><small>Total Donors</small><h2>{{ total_donors }}</h2></div></div><div class="stat"><span class="stat-icon"><i class="fa-solid fa-droplet"></i></span><div><small>Total Requests</small><h2>{{ total_requests }}</h2></div></div><div class="stat"><span class="stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><small>Approved</small><h2>{{ approved }}</h2></div></div><div class="stat"><span class="stat-icon green"><i class="fa-solid fa-heart"></i></span><div><small>Completed Donations</small><h2>{{ completed }}</h2></div></div></div>
+<div class="card table-card"><div class="card-head"><h3>Blood Group Statistics</h3></div><table><thead><tr><th>Blood Group</th><th>Donors</th><th>Requests</th><th>Completed Donations</th></tr></thead><tbody>{% for row in group_stats %}<tr><td><span class="blood">{{ row.group }}</span></td><td>{{ row.donors }}</td><td>{{ row.requests }}</td><td>{{ row.donations }}</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

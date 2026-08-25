@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import Donor
 
 # Create your views here.
@@ -27,6 +27,7 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request, username=email, password=password)
+       
         if user:
             login(request, user)
             return redirect('home') 
@@ -42,7 +43,7 @@ def register_view(request):
     error = None
     success = None
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
+        first_name = request.POST.get('full_name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         password = request.POST.get('password')
@@ -53,13 +54,11 @@ def register_view(request):
         elif User.objects.filter(email=email).exists():
             error = "Email already exists"
         else:
-            user = User.objects.create_user(username=email, email=email, password=password, first_name=full_name)
+            user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name)
         
             success = "Registration Successful! Please Login."
             
     return render(request, 'register.html', {'error': error, 'success': success})
-
-
 
 
 

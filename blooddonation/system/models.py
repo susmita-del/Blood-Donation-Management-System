@@ -1,4 +1,4 @@
-
+from admin_panel.models import DonorProfile
 
 # Create your models here.
 from django.db import models

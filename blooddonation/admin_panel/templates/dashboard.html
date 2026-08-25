@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block crumb %}Dashboard{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+<div class="page-head"><div><h1>Admin Dashboard</h1><p>Welcome back! Here's what's happening today.</p></div><div class="date-pill"><i class="fa-regular fa-calendar"></i><span id="today"></span></div></div>
+<div class="stats">
+  <div class="stat"><span class="stat-icon"><i class="fa-solid fa-users"></i></span><div><small>Total Donors</small><h2>{{ total_donors }}</h2><em>Registered donors</em></div></div>
+  <div class="stat"><span class="stat-icon"><i class="fa-solid fa-droplet"></i></span><div><small>Blood Requests</small><h2>{{ total_requests }}</h2><em>{{ pending_requests }} pending</em></div></div>
+  <div class="stat"><span class="stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><small>Completed</small><h2>{{ completed_donations }}</h2><em>Successful donations</em></div></div>
+</div>
+<div class="grid-2">
+  <section class="card">
+    <div class="card-head"><div><h3>Blood Group Availability</h3><p>Completed donations by blood group</p></div></div>
+    <div class="chart">
+      {% for group, count in blood_counts.items %}
+      <div class="bar-wrap"><span>{{ count }}</span><div class="bar" style="height:{% widthratio count 10 100 %}px"></div><b>{{ group }}</b></div>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="card">
+    <div class="card-head"><div><h3>Recent Activity</h3><p>Latest system activities</p></div><a href="{% url 'admin_panel:reports' %}">View all</a></div>
+    <div class="activity">
+      {% for item in activities %}
+      <div class="activity-row"><span class="activity-icon"><i class="fa-solid fa-{{ item.icon }}"></i></span><div><p>{{ item.text }} - <b>{{ item.sub }}</b></p><small>{{ item.time|timesince }} ago</small></div></div>
+      {% empty %}<p class="muted">No activity yet.</p>{% endfor %}
+    </div>
+  </section>
+</div>
+<div class="quick">
+  <a href="{% url 'admin_panel:donors' %}"><i class="fa-solid fa-users"></i> Manage Donors</a>
+  <a href="{% url 'admin_panel:requests' %}"><i class="fa-solid fa-droplet"></i> Review Requests</a>
+  <a href="{% url 'admin_panel:reports' %}"><i class="fa-solid fa-chart-column"></i> View Reports</a>
+</div>
+<script>document.getElementById('today').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});</script>
+{% endblock %}

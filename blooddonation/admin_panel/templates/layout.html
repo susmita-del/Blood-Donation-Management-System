@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+    <div><b>Blood Donation</b><small>Management System</small></div>
+  </div>
+  <nav>
+    <a href="{% url 'admin_panel:dashboard' %}" class="{% if active == 'dashboard' %}active{% endif %}"><i class="fa-solid fa-gauge"></i>Admin Dashboard</a>
+    <a href="{% url 'admin_panel:donors' %}" class="{% if active == 'donors' %}active{% endif %}"><i class="fa-solid fa-users"></i>Manage Donors</a>
+    <a href="{% url 'admin_panel:requests' %}" class="{% if active == 'requests' %}active{% endif %}"><i class="fa-solid fa-droplet"></i>Blood Requests</a>
+    <a href="{% url 'admin_panel:approved_requests' %}" class="{% if active == 'approved' %}active{% endif %}"><i class="fa-solid fa-circle-check"></i>Approved Requests</a>
+    <a href="{% url 'admin_panel:users' %}" class="{% if active == 'admin' %}active{% endif %}"><i class="fa-solid fa-user"></i>Users</a>
+    <a href="{% url 'admin_panel:reports' %}" class="{% if active == 'reports' %}active{% endif %}"><i class="fa-solid fa-chart-column"></i>Reports</a>
+    <a href="{% url 'admin_panel:logout' %}" class="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+  </nav>
+</aside>
+<main class="main">
+<header class="topbar">
+  <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+  <div class="crumb">Admin / <b>{% block crumb %}Dashboard{% endblock %}</b></div>
+  <div class="admin-user"><span class="avatar"><i class="fa-solid fa-user"></i></span><span><b>{{ request.user.get_full_name|default:request.user.username }}</b><small>Administrator</small></span></div>
+</header>
+<section class="content">
+{% if messages %}{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+{% block content %}{% endblock %}
+</section>
+</main>
+</div>
+{% endblock %}

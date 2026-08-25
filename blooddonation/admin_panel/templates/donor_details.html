@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% block title %}Donor Details{% endblock %}{% block crumb %}Donor Details{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>{{ donor.user.get_full_name|default:donor.user.username }}</h1><p>Donor profile and donation history.</p></div><a class="btn" href="{% url 'admin_panel:donors' %}">Back</a></div>
+<div class="profile-grid"><section class="card profile"><div class="big-avatar"><i class="fa-solid fa-user"></i></div><h2>{{ donor.user.get_full_name|default:donor.user.username }}</h2><span class="blood big">{{ donor.blood_group }}</span><div class="info"><p><b>Email:</b> {{ donor.user.email }}</p><p><b>Phone:</b> {{ donor.phone|default:"—" }}</p><p><b>Location:</b> {{ donor.city|default:"—" }}, {{ donor.state|default:"" }}</p><p><b>Available:</b> {% if donor.available_to_donate %}Yes{% else %}No{% endif %}</p></div></section><section class="card"><div class="card-head"><h3>Donation History</h3></div><table><thead><tr><th>Date</th><th>Hospital</th><th>Group</th><th>Status</th></tr></thead><tbody>{% for d in donations %}<tr><td>{{ d.donation_date }}</td><td>{{ d.hospital }}</td><td>{{ d.blood_group }}</td><td><span class="badge success">{{ d.status }}</span></td></tr>{% empty %}<tr><td colspan="4" class="empty">No donations recorded.</td></tr>{% endfor %}</tbody></table></section></div>
+{% endblock %}
