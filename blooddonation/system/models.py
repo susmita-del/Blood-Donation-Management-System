@@ -12,7 +12,7 @@ class Donor(models.Model):  # Capital D
         ('AB+', 'AB+'), ('AB-', 'AB-'),
     ]
     
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # login er sathe connect
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # login er sathe connect
     name = models.CharField(max_length=100)
     blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)
     age = models.IntegerField(default=18)
@@ -25,3 +25,16 @@ class Donor(models.Model):  # Capital D
     
     def __str__(self):
         return f"{self.name} - {self.blood_group}"
+
+
+class BloodRequest(models.Model):
+    patient_name = models.CharField(max_length=100)
+    hospital_name = models.CharField(max_length=100)
+    blood_group = models.CharField(max_length=10)
+    city = models.CharField(max_length=100)
+    urgency = models.CharField(max_length=20)
+    details = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient_name} - {self.blood_group}"

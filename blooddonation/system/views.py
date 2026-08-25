@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from .models import Donor
+from .models import BloodRequest
 
 # Create your views here.
 
@@ -54,9 +55,9 @@ def register_view(request):
             error = "Email already exists"
         else:
             user = User.objects.create_user(username=email, email=email, password=password, first_name=full_name)
-        
+       
             success = "Registration Successful! Please Login."
-            
+        
     return render(request, 'register.html', {'error': error, 'success': success})
 
 
@@ -64,20 +65,40 @@ def register_view(request):
 
 
 
+from django.shortcuts import render
+from .models import Donor
+
 def search_donor(request):
     doner = Donor.objects.filter(is_available=True)
-    
-    # Filter logic
+
     blood_group = request.GET.get('blood_group')
     state = request.GET.get('state')
     city = request.GET.get('city')
-    
-    if blood_group:
-        doner = doner.filter(blood_group=blood_group)
-    if state:
-        doner = doner.filter(state=state)
-    if city:
-        doner = doner.filter(city=city)
 
-    context = {'doner': doner}
-    return render(request, 'doner.html', context)
+    # Select thakle filter korbe na
+    if blood_group and blood_group != "Select":
+        doner = doner.filter(blood_group=blood_group)
+    if state and state != "Select" and state != "":
+        doner = doner.filter(state__icontains=state)
+    if city and city != "Select" and city != "":
+        doner = doner.filter(city__icontains=city)
+
+    return render(request, 'doner.html', {'doner': doner})
+
+def blood_request_view(request):
+    if request.method == 'POST':
+        BloodRequest.objects.create(
+            patient_name = request.POST.get('patient_name'),
+            hospital_name = request.POST.get('hospital_name'),
+            blood_group = request.POST.get('blood_group'),
+            city = request.POST.get('city'),
+            urgency = request.POST.get('urgency'),
+            details = request.POST.get('details'),
+        )
+        return render(request, 'blood_request.html', {'success': 'Your blood request has been submitted successfully! We will contact donors.'})
+    
+    return render(request, 'blood_request.html')
+
+def request_list_view(request): # sob request dekhar jonno
+    all_requests = BloodRequest.objects.all().order_by('-created_at')
+    return render(request, 'request_list.html', {'requests': all_requests})

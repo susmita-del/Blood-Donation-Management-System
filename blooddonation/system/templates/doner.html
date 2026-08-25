@@ -10,120 +10,76 @@
 
 {% block content %}
 
+    {% include 'header.html' %}
 
-<style>
-    body { 
-        background-color: #f8f9fa; 
-    }
-    .search-box {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        margin-bottom: 30px;
-    }
-    .btn-red {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-    }
-    .btn-red:hover {
-        background-color: #c82333;
-        color: white;
-    }
-    .donor-card {
-        background: white;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        margin-bottom: 20px;
-        transition: 0.3s;
-    }
-    .donor-card:hover {
-        transform: translateY(-3px);
-    }
-    .badge-available {
-        background-color: #28a745;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 12px;
-    }
-    .breadcrumb a { 
-        text-decoration: none; 
-        color: #6c757d; 
-    }
-</style>
-
+ <style>
+    body{ background:#fff; font-family: 'Segoe UI', sans-serif; }
+    .search-box{ border:1px solid #ddd; padding:20px; border-radius:10px; }
+    .donor-card{ border:1px solid #eee; border-radius:10px; padding:15px; text-align:center; background:#fff; }
+    .btn-maroon{ background:#8B0000; color:white; font-size:13px; padding:3px 15px; }
+    .btn-maroon:hover{ background:#5a0000; color:white; }
+  </style>
+</head>
+<body>
 <div class="container mt-4">
-    
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb">
-        <a href="#">Home</a> > <span class="text-dark">Search Donor</span>
-    </nav>
+  <h5 class="fw-bold">Search Blood Donors</h5>
+  <small class="text-muted">Home > Search Donor</small>
 
-    <h2 class="mb-3">Search Blood Donors</h2>
-
-    <!-- Search Form -->
-    <div class="search-box">
-        <form method="GET" action="">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Blood Group</label>
-                    <select name="blood_group" class="form-select">
-                        <option value="">Select</option>
-                        <option value="A+">A+</option>
-                        <option value="B+">B+</option>
-                        <option value="O+">O+</option>
-                        <option value="AB+">AB+</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">State</label>
-                    <select name="state" class="form-select">
-                        <option value="">Select</option>
-                        <option value="West Bengal">West Bengal</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">City</label>
-                    <select name="city" class="form-select">
-                        <option value="">Select</option>
-                        <option value="Kolkata">Kolkata</option>
-                        <option value="Howrah">Howrah</option>
-                    </select>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-red w-100">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <!-- Available Donors -->
-    <h4 class="mb-3">Available Donors</h4>
+  <!-- Search Box -->
+  <form method="GET" class="search-box mt-3">
     <div class="row">
-        {% for donor in donors %}
-        <div class="col-md-4">
-            <div class="donor-card">
-                <div class="d-flex align-items-center mb-2">
-                    <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" width="50" class="me-3">
-                    <div>
-                        <h6 class="mb-0">{{ donor.name }}</h6>
-                        <strong class="text-danger">{{ donor.blood_group }}</strong>
-                    </div>
-                </div>
-                <p class="text-muted mb-1"> {{ donor.city }}, {{ donor.state }}</p>
-                <span class="badge-available mb-2 d-inline-block">Available</span><br>
-                <a href="#" class="btn btn-red btn-sm w-100 mt-2">Contact</a>
-            </div>
-        </div>
-        {% empty %}
-        <p>No donors found.</p>
-        {% endfor %}
+      <div class="col-md-3 mb-2">
+        <label class="small">Blood Group</label>
+        <input list="bloodGroupList" name="blood_group" class="form-control form-control-sm" placeholder="Select or Type">
+  <datalist id="bloodGroupList">
+    <option value="A+"><option value="A-"><option value="B+"><option value="B-">
+    <option value="O+"><option value="O-"><option value="AB+"><option value="AB-">
+  </datalist>
+      </div>
+      <div class="col-md-3 mb-2">
+        <label class="small">State</label>
+        <input list="stateList" name="state" class="form-control form-control-sm" placeholder="Select or Type">
+  <datalist id="stateList">
+    <option value="West Bengal"><option value="Bihar"><option value="Delhi">
+  </datalist>
+      </div>
+      <div class="col-md-3 mb-2">
+        <label class="small">City</label>
+       <input list="cityList" name="city" class="form-control form-control-sm" placeholder="Select or Type">
+  <datalist id="cityList">
+    <option value="Jalpaiguri"><option value="Kolkata"><option value="Howrah"><option value="Asansol">
+  </datalist>
+      </div>
+      <div class="col-md-3 d-flex align-items-end mb-2">
+        <button type="submit" class="btn btn-maroon w-100">Search</button>
+      </div>
     </div>
-<p>Hello</p>
+  </form>
+
+  <!-- Available Donors -->
+  <h6 class="mt-4 fw-bold">Available Donors</h6>
+  <div class="row mt-2">
+    {% for d in doner %}
+    <div class="col-md-4 mb-3">
+      <div class="donor-card shadow-sm">
+        <div class="d-flex align-items-center">
+          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="45" class="rounded-circle">
+          <div class="ms-3 text-start">
+            <strong style="font-size:14px;">{{ d.name }}</strong><br>
+            <small class="text-danger fw-bold">{{ d.blood_group }}</small><br>
+            <small style="font-size:12px;">{{ d.city }}, {{ d.state }}</small><br>
+            <small class="text-success" style="font-size:11px;">Available</small>
+          </div>
+        </div>
+      <a href="https://wa.me/91{{ donor.phone }}?text=Hi%20{{ donor.name }},%20I%20need%20{{ donor.blood_group }}%20blood%20in%20{{ donor.city }}" target="_blank" class="btn-maroon" style="text-decoration:none;">Contact</a>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted mt-3">No Donors Found</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
+ {% include 'footer.html' %}
 </body>
 </html>
