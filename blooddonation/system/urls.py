@@ -10,4 +10,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('doner/', views.search_donor, name='doner'),
+    path('request-blood/', views.blood_request_view, name='request-blood'),
+    path('blood-requests/', views.request_list_view, name='request_list'),
+
 ]
