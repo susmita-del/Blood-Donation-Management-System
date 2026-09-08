@@ -1,0 +1,13 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}My Statistics{% endblock %}{% block crumb %}My Statistics{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>My Statistics</h1><p>Only your own donation and blood-request activity is shown here.</p></div></div>
+<div class="stats">
+<div class="stat"><span class="stat-icon"><i class="fa-solid fa-droplet"></i></span><div><small>Total Donations</small><h2>{{ total_donations }}</h2></div></div>
+<div class="stat"><span class="stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><small>Completed Donations</small><h2>{{ completed_donations }}</h2></div></div>
+<div class="stat"><span class="stat-icon"><i class="fa-solid fa-calendar-days"></i></span><div><small>Scheduled Donations</small><h2>{{ scheduled_donations }}</h2></div></div>
+<div class="stat"><span class="stat-icon"><i class="fa-solid fa-hand-holding-droplet"></i></span><div><small>Total Blood Requests</small><h2>{{ total_requests }}</h2></div></div>
+</div>
+<section class="card"><div class="card-head"><div><h3>My Request Status</h3><p>Status of the blood requests submitted by you.</p></div></div><div class="stats"><div class="stat"><div><small>Pending</small><h2>{{ pending_requests }}</h2></div></div><div class="stat"><div><small>Approved</small><h2>{{ approved_requests }}</h2></div></div><div class="stat"><div><small>Rejected</small><h2>{{ rejected_requests }}</h2></div></div><div class="stat"><div><small>Completed</small><h2>{{ completed_requests }}</h2></div></div></div></section>
+{% if profile %}<section class="card"><div class="card-head"><div><h3>My Donor Profile</h3><p>Your current donor information.</p></div><a href="{% url 'user_dashboard:profile' %}">Edit</a></div><div class="profile-info"><div class="info-item"><span>Name: </span><strong>{{ profile.name }}</strong></div><div class="info-item"><span>Blood Group: </span><strong>{{ profile.blood_group }}</strong></div><div class="info-item"><span>City: </span><strong>{{ profile.city|default:"Not provided" }}</strong></div><div class="info-item"><span>Availability: </span><strong>{% if profile.available_to_donate %}Available to Donate{% else %}Not Available{% endif %}</strong></div></div></section>{% endif %}
+{% endblock %}

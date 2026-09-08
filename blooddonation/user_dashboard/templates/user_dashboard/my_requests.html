@@ -1,0 +1,8 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}My Blood Requests{% endblock %}{% block crumb %}My Blood Requests{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>My Blood Requests</h1><p>Every request submitted by your account and its current donor status.</p></div><a class="btn primary" href="{% url 'user_dashboard:request_blood' %}">New Request</a></div>
+<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Blood</th><th>Hospital</th><th>Urgency</th><th>Status</th><th>Donor / Schedule</th></tr></thead><tbody>
+{% for r in requests %}<tr><td><b>{{ r.patient_name }}</b><small>{{ r.created_at|date:"d M Y, h:i A" }}</small></td><td><span class="blood">{{ r.blood_group }}</span></td><td>{{ r.hospital_name }}<small>{{ r.city }}</small></td><td><span class="urgency {{ r.urgency|lower }}">{{ r.urgency }}</span></td><td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td><td>{% if r.assigned_donor %}<b>{{ r.assigned_donor.name }}</b><small>Donor: {{ r.donor_response }}</small>{% if r.donation %}<small>{{ r.donation.donation_date|date:"d M Y" }}{% if r.donation.donation_time %}, {{ r.donation.donation_time|time:"H:i" }}{% endif %}</small>{% endif %}{% else %}No donor assigned yet{% endif %}</td></tr>{% empty %}<tr><td colspan="6" class="empty">You have not submitted any blood request.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

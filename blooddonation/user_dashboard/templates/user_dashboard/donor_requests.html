@@ -1,0 +1,267 @@
+{% extends "user_dashboard/base.html" %}
+{% comment %} {% block title %}Requests for Me{% endblock %}{% block crumb %}Requests for Me{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Blood Requests for Me</h1><p>These approved requests match your donor profile. Accept with a date/time or decline.</p></div></div>
+{% for r in requests %}
+<div class="card" style="margin-bottom:18px;">
+  <div class="card-head"><div><h3>{{ r.patient_name }} <span class="blood">{{ r.blood_group }}</span></h3><p>{{ r.urgency }} request • {{ r.created_at|date:"d M Y, h:i A" }}</p></div><span class="badge approved">Admin Approved</span></div>
+  <div class="profile-info"><div class="info-item"><span>Hospital</span><strong>{{ r.hospital_name }}</strong></div><div class="info-item"><span>City</span><strong>{{ r.city }}</strong></div><div class="info-item"><span>Patient</span><strong>{{ r.patient_name }}</strong></div><div class="info-item"><span>Details</span><strong>{{ r.additional_details|default:"No additional details" }}</strong></div></div>
+  <form method="post" action="{% url 'user_dashboard:donor_request_action' r.pk %}" style="margin-top:18px;">
+    {% csrf_token %}
+    <div class="form-grid"><label>Donation Date *<input type="date" name="donation_date" min="{% now 'Y-m-d' %}" required></label><label>Donation Time *<input type="time" name="donation_time" required></label></div>
+    <div style="margin-top:15px;display:flex;gap:10px;"><button class="btn primary" name="action" value="accept" type="submit">Accept & Schedule Donation</button><button class="btn" name="action" value="decline" type="submit" onclick="return confirm('Decline this blood request?')">Decline</button></div>
+  </form>
+</div>
+{% empty %}<div class="card empty">No approved blood requests are currently assigned to you.</div>{% endfor %}
+{% endblock %}  {% endcomment %}
+
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Blood Requests for Me</h1>
+
+    <p>
+        These are blood requests that the administrator
+        has assigned to you.
+    </p>
+</div><br>
+
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+{% if requests %}
+
+<div class="requests-container">
+
+    {% for r in requests %}
+
+    <div class="request-card">
+
+        <!-- Patient -->
+        <div class="request-section">
+        <h2>Reciever Details: </h2>
+            <p>
+            <strong>Name:</strong>
+                {{ r.patient_name }}
+            </p>
+
+            <p>
+                <strong>Blood Group:</strong>
+                {{ r.blood_group }}
+            </p>
+
+            <p>
+                <strong>Hospital:</strong>
+                {{ r.hospital_name }}
+            </p>
+
+            <p>
+                <strong>City:</strong>
+                {{ r.city }}
+            </p>
+
+            <p>
+                <strong>Urgency:</strong>
+                {{ r.urgency }}
+            </p>
+
+            {% if r.additional_details %}
+                <p>
+                    <strong>Details:</strong>
+                    {{ r.additional_details }}
+                </p>
+            {% endif %}
+        </div><br>
+
+
+        <!-- Requester -->
+        <div class="request-section">
+
+            <h2>Requester Details: </h2>
+
+            <p>
+            <strong>Name: </strong>
+                {{ r.requester.get_full_name|default:r.requester.username }}
+            </p>
+
+            <p>
+                <strong>Email: </strong>
+                {{ r.requester.email }}
+            </p>
+
+        </div><br>
+
+
+        <!-- Status -->
+        <div class="request-section">
+
+        <h3>Request Status: </h3>
+
+            <p>
+                <strong>Status:</strong>
+
+                <span class="status-approved">
+                    {{ r.status }}
+                </span>
+            </p>
+
+            <p>
+                <strong>Your Response:</strong>
+
+                {% if r.donor_response %}
+                    {{ r.donor_response }}
+                {% else %}
+                    Waiting
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        {% if r.donor_response == "Waiting" or not r.donor_response %}
+
+        <div class="donor-actions">
+
+            <h3>
+                Respond to this request:
+            </h3>
+
+
+            <!-- ACCEPT FORM -->
+
+            <form
+                method="post"
+                action="{% url 'user_dashboard:donor_request_action' r.pk %}"
+                class="accept-form"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="accept"
+                >
+
+
+                <label>
+                    Donation Date:
+                </label>
+
+                <input
+                    type="date"
+                    name="donation_date"
+                    required
+                    min="{{ today|date:'Y-m-d' }}"
+                >
+
+
+                <label>
+                    Donation Time:
+                </label>
+
+                <input
+                    type="time"
+                    name="donation_time"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="btn accept-btn"
+                >
+                    Accept & Schedule Donation
+                </button>
+
+            </form>
+
+
+            <!-- DECLINE FORM -->
+
+            <form
+                method="post"
+                action="{% url 'user_dashboard:donor_request_action' r.pk %}"
+                class="decline-form"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="decline"
+                >
+
+                <button
+                    type="submit"
+                    class="btn decline-btn"
+                >
+                    Decline
+                </button>
+
+            </form>
+
+        </div>
+
+        {% elif r.donor_response == "Accepted" %}
+
+            <div class="accepted-message">
+
+                <strong>
+                    ✓ You accepted this request.
+                </strong>
+
+                <p>
+                    Donation has been scheduled.
+                </p>
+
+            </div>
+
+        {% elif r.donor_response == "Declined" %}
+
+            <div class="declined-message">
+
+                <strong>
+                    You declined this request.
+                </strong>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% else %}
+
+<div class="empty-state">
+
+    <h3>
+        No Blood Requests
+    </h3>
+
+    <p>
+        No blood requests have been assigned to you
+        by the administrator yet.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

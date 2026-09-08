@@ -1,0 +1,60 @@
+{% load static %}
+{% load user_dashboard_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}User Dashboard{% endblock %} | Blood Donation</title>
+  <link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-icon"><i class="fa-solid fa-heart-pulse"></i></div><div><b>Blood Donation</b><small>Management System</small></div></div>
+    <nav>
+      <a href="{% url 'user_dashboard:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fa-solid fa-gauge"></i>Dashboard</a>
+      <a href="{% url 'user_dashboard:profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}"><i class="fa-regular fa-user"></i>My Profile</a>
+      <a href="{% url 'user_dashboard:search_donors' %}" class="{% if request.resolver_match.url_name == 'search_donors' %}active{% endif %}"><i class="fa-solid fa-magnifying-glass"></i>Search Donors</a>
+      <a href="{% url 'user_dashboard:donor_requests' %}" class="{% if request.resolver_match.url_name == 'donor_requests' %}active{% endif %}"><i class="fa-solid fa-hand-holding-droplet"></i>Requests for Me</a>
+      <a href="{% url 'user_dashboard:donation_history' %}" class="{% if request.resolver_match.url_name == 'donation_history' %}active{% endif %}"><i class="fa-solid fa-droplet"></i>My Donations</a>
+      <a href="{% url 'user_dashboard:request_blood' %}" class="{% if request.resolver_match.url_name == 'request_blood' %}active{% endif %}"><i class="fa-solid fa-plus"></i>Request Blood</a>
+      <a href="{% url 'user_dashboard:my_requests' %}" class="{% if request.resolver_match.url_name == 'my_requests' %}active{% endif %}"><i class="fa-solid fa-list-check"></i>My Requests</a>
+      <a href="{% url 'user_dashboard:notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}"><i class="fa-regular fa-bell"></i>Notifications</a>
+      <a href="{% url 'user_dashboard:faq' %}" class="{% if request.resolver_match.url_name == 'faq' %}active{% endif %}"><i class="fa-regular fa-circle-question"></i>FAQ</a>
+      <a href="{% url 'user_dashboard:statistics' %}" class="{% if request.resolver_match.url_name == 'statistics' %}active{% endif %}"><i class="fa-solid fa-chart-column"></i>My Statistics</a>
+      <a class="logout" href="{% url 'admin_panel:logout' %}"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="hamburger" type="button" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+      <div class="crumb">User / <b>{% block crumb %}Dashboard{% endblock %}</b></div>
+
+
+    {% unread_notification_count request.user as unread_count %}
+      <div class="topbar-actions">
+        <a class="top-notification" href="{% url 'user_dashboard:notifications' %}" aria-label="Notifications">
+          <i class="fa-regular fa-bell"></i>
+          {% if unread_count %}
+            <span class="notification-count">{{ unread_count }}</span>
+          {% endif %}
+        </a>
+        <div class="user-menu">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <b>{{ request.user.get_full_name|default:request.user.username }}</b>
+            <small>User / Donor</small>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="content">
+      {% if messages %}{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+</body>
+</html>

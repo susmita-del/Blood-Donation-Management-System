@@ -1,9 +1,220 @@
 {% extends "layout.html" %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
-{% block title %}Blood Requests{% endblock %}{% block crumb %}Blood Requests{% endblock %}
+{% block title %}Blood Requests{% endblock %}
+{% block crumb %}Blood Requests{% endblock %}
+
 {% block content %}
-<div class="page-head"><div><h1>Blood Request Approval</h1><p>Review incoming blood requests.</p></div></div>
-<form class="filters" method="get"><select name="status"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option><option value="Completed">Completed</option></select><select name="urgency"><option value="">All urgency</option><option>Critical</option><option>Urgent</option><option>Normal</option></select><button class="btn primary">Filter</button></form>
-<div class="card table-card"><table><thead><tr><th>Patient</th><th>Requester</th><th>Blood Group</th><th>Hospital</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead><tbody>{% for r in requests %}<tr><td><b>{{ r.patient_name }}</b><small>{{ r.created_at|date:"d M Y, h:i A" }}</small></td><td>{{ r.requester.username }}</td><td><span class="blood">{{ r.blood_group }}</span></td><td>{{ r.hospital_name }}<small>{{ r.city }}</small></td><td><span class="urgency {{ r.urgency|lower }}">{{ r.urgency }}</span></td><td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td><td>{% if r.status == "Pending" %}<div class="actions"><form method="post" action="{% url 'admin_panel:approve_request' r.pk %}">{% csrf_token %}<button class="btn success-btn">Approve</button></form><form method="post" action="{% url 'admin_panel:reject_request' r.pk %}">{% csrf_token %}<button class="btn danger-btn">Reject</button></form></div>{% else %}—{% endif %}</td></tr>{% empty %}<tr><td colspan="7" class="empty">No requests found.</td></tr>{% endfor %}</tbody></table></div>
+
+<div class="page-head">
+    <div>
+        <h1>Blood Request Approval</h1>
+        <p>Review incoming requests and start donor matching.</p>
+    </div>
+</div>
+
+{% comment %} <form class="filters" method="get">
+    ...
+</form> {% endcomment %}
+
+<form class="filters" method="get">
+
+    <select name="status">
+        <option value="">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Completed">Completed</option>
+    </select>
+
+    <select name="urgency">
+        <option value="">All urgency</option>
+        <option value="Critical">Critical</option>
+        <option value="Urgent">Urgent</option>
+        <option value="Normal">Normal</option>
+    </select>
+
+    <button class="btn primary" type="submit">
+        Filter
+    </button>
+
+</form>
+
+<div class="card table-card">
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+    <th>Patient</th>
+    <th>Requester</th>
+    <th>Blood</th>
+    <th>Hospital</th>
+    <th>Urgency</th>
+    <th>Status</th>
+    <th>Donor</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for r in requests %}
+
+<tr>
+
+    <!-- Patient -->
+    <td>
+        <b>{{ r.patient_name }}</b>
+        <small>{{ r.created_at|date:"d M Y, h:i A" }}</small>
+    </td>
+
+    <!-- Requester -->
+    <td>
+        {{ r.requester.username }}
+    </td>
+
+    <!-- Blood -->
+    <td>
+        <span class="blood">{{ r.blood_group }}</span>
+    </td>
+
+    <!-- Hospital -->
+    <td>
+        {{ r.hospital_name }}
+        <small>{{ r.city }}</small>
+    </td>
+
+    <!-- Urgency -->
+    <td>
+        <span class="urgency {{ r.urgency|lower }}">
+            {{ r.urgency }}
+        </span>
+    </td>
+
+    <!-- Status -->
+    <td>
+        <span class="badge {{ r.status|lower }}">
+            {{ r.status }}
+        </span>
+    </td>
+
+    <!-- DONOR -->
+    <td>
+        {% if r.assigned_donor %}
+
+            <b>{{ r.assigned_donor.name }}</b>
+            <small>{{ r.assigned_donor.blood_group }}</small>
+            <small>Response: {{ r.donor_response }}</small>
+
+        {% else %}
+
+            —
+
+        {% endif %}
+    </td>
+
+    <!-- ACTION -->
+    <td>
+
+        {% if r.status == "Pending" %}
+
+            <div class="actions">
+
+                <form method="post"
+                      action="{% url 'admin_panel:approve_request' r.pk %}">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="btn success-btn">
+                        Approve
+                    </button>
+                </form>
+
+                <form method="post"
+                      action="{% url 'admin_panel:reject_request' r.pk %}">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="btn danger-btn">
+                        Reject
+                    </button>
+                </form>
+
+            </div>
+
+        {% elif r.status == "Approved" and not r.assigned_donor %}
+
+            <form method="post"
+                  action="{% url 'admin_panel:assign_donor' r.pk %}">
+
+                {% csrf_token %}
+
+                <select name="donor_id" required>
+
+                    <option value="">
+                        Select Donor
+                    </option>
+
+                    {% for donor in r.available_donors %}
+
+                        <option value="{{ donor.pk }}">
+                            {{ donor.name }}
+                            — {{ donor.blood_group }}
+                            — {{ donor.city }}
+                        </option>
+
+                    {% empty %}
+
+                        <option value="" disabled>
+                            No matching donor available
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <button type="submit"
+                        class="btn success-btn">
+                    Assign
+                </button>
+
+            </form>
+
+        {% elif r.assigned_donor %}
+
+            <span>Assigned</span>
+
+        {% elif r.status == "Rejected" %}
+
+            <span>Rejected</span>
+
+        {% elif r.status == "Completed" %}
+
+            <span>Completed</span>
+
+        {% else %}
+
+            —
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="8" class="empty">
+        No requests found.
+    </td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
 {% endblock %}

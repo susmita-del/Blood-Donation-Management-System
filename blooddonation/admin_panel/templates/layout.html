@@ -11,8 +11,10 @@
     <a href="{% url 'admin_panel:donors' %}" class="{% if active == 'donors' %}active{% endif %}"><i class="fa-solid fa-users"></i>Manage Donors</a>
     <a href="{% url 'admin_panel:requests' %}" class="{% if active == 'requests' %}active{% endif %}"><i class="fa-solid fa-droplet"></i>Blood Requests</a>
     <a href="{% url 'admin_panel:approved_requests' %}" class="{% if active == 'approved' %}active{% endif %}"><i class="fa-solid fa-circle-check"></i>Approved Requests</a>
-    <a href="{% url 'admin_panel:users' %}" class="{% if active == 'admin' %}active{% endif %}"><i class="fa-solid fa-user"></i>Users</a>
+    <a href="{% url 'admin_panel:users' %}" class="{% if active == 'users' %}active{% endif %}"><i class="fa-solid fa-user"></i>Users</a>
     <a href="{% url 'admin_panel:reports' %}" class="{% if active == 'reports' %}active{% endif %}"><i class="fa-solid fa-chart-column"></i>Reports</a>
+    <a href="{% url 'admin_panel:donations' %}" class="{% if active == 'donations' %}active{% endif %}"><i class="fa-solid fa-hand-holding-droplet"></i>Donations</a>
+    <a href="{% url 'admin_panel:notifications' %}" class="{% if active == 'notifications' %}active{% endif %}"><i class="fa-regular fa-bell"></i>Notifications</a>
     <a href="{% url 'admin_panel:logout' %}" class="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
   </nav>
 </aside>
@@ -20,7 +22,7 @@
 <header class="topbar">
   <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
   <div class="crumb">Admin / <b>{% block crumb %}Dashboard{% endblock %}</b></div>
-  <div class="admin-user"><span class="avatar"><i class="fa-solid fa-user"></i></span><span><b>{{ request.user.get_full_name|default:request.user.username }}</b><small>Administrator</small></span></div>
+  <div style="display:flex;align-items:center;gap:18px;"><a href="{% url 'admin_panel:notifications' %}" style="text-decoration:none;color:#333;position:relative;font-size:18px;"><i class="fa-regular fa-bell"></i>{% if unread_notifications %}<span style="position:absolute;top:-7px;right:-9px;background:#c90000;color:#fff;border-radius:50%;font-size:9px;min-width:16px;height:16px;display:grid;place-items:center;">{{ unread_notifications }}</span>{% endif %}</a><div class="admin-user"><span class="avatar"><i class="fa-solid fa-user"></i></span><span><b>{{ request.user.get_full_name|default:request.user.username }}</b><small>Administrator</small></span></div></div>
 </header>
 <section class="content">
 {% if messages %}{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}

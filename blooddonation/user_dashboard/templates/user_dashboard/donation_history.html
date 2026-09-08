@@ -1,0 +1,8 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}My Donations{% endblock %}{% block crumb %}My Donations{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>My Donations</h1><p>Track scheduled and completed donations, including the blood request you helped.</p></div></div>
+<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Date / Time</th><th>Hospital</th><th>Blood</th><th>Related Request</th><th>Status</th></tr></thead><tbody>
+{% for d in donations %}<tr><td>{{ d.donation_date|date:"d M Y" }}{% if d.donation_time %}<small>{{ d.donation_time|time:"H:i" }}</small>{% endif %}</td><td>{{ d.hospital }}</td><td><span class="blood">{{ d.blood_group }}</span></td><td>{% if d.request %}{{ d.request.patient_name }}<small>{{ d.request.requester.username }}</small>{% else %}Independent donation{% endif %}</td><td><span class="badge {{ d.status|lower }}">{{ d.status }}</span></td></tr>{% empty %}<tr><td colspan="5" class="empty">No donation records found.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

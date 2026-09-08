@@ -1,0 +1,165 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}Dashboard{% endblock %}{% block crumb %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>My Dashboard</h1><p>Manage your blood requests and donor activity from one place.</p></div><a class="btn primary" href="{% url 'user_dashboard:request_blood' %}"><i class="fa-solid fa-plus"></i> Request Blood</a></div>
+{% if not profile %}<div class="setup-banner"><div><b>Complete your donor profile</b><p>Add your blood group, location and availability so you can donate and receive matching requests.</p></div><a class="btn primary" href="{% url 'user_dashboard:profile' %}">Complete Profile</a></div>{% endif %}
+<div class="stats">
+  <div class="stat"><span class="stat-icon"><i class="fa-solid fa-droplet"></i></span><div><small>Total Donations</small><h2>{{ total_donations }}</h2></div></div>
+  <div class="stat"><span class="stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><small>Completed Donations</small><h2>{{ completed_donations }}</h2></div></div>
+  <div class="stat"><span class="stat-icon"><i class="fa-solid fa-hand-holding-droplet"></i></span><div><small>My Blood Requests</small><h2>{{ my_requests_count }}</h2></div></div>
+  <div class="stat"><span class="stat-icon"><i class="fa-regular fa-bell"></i></span><div><small>Unread Notifications</small><h2>{{ unread_notifications }}</h2></div></div>
+</div>
+<div class="grid-2">
+<section class="card"><div class="card-head"><div><h3>Requests I Submitted</h3><p>Track your receiver activity and donor assignment.</p></div><a href="{% url 'user_dashboard:my_requests' %}">View all</a></div>
+<div class="table-wrap"><table><thead><tr><th>Patient</th><th>Blood</th><th>Hospital</th><th>Status</th><th>Donor</th></tr></thead><tbody>
+{% for r in my_requests %}<tr><td><b>{{ r.patient_name }}</b><small>{{ r.created_at|date:"d M Y, h:i A" }}</small></td><td><span class="blood">{{ r.blood_group }}</span></td><td>{{ r.hospital_name }}<small>{{ r.city }}</small></td><td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td><td>{% if r.assigned_donor %}{{ r.assigned_donor.name }}<small>{{ r.donor_response }}</small>{% else %}Waiting for donor{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="empty">No blood requests submitted.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<section class="card blood-card"><div class="card-head"><div><h3>Donor Status</h3><p>Your donor profile and upcoming donation.</p></div></div><div class="big-blood">{{ blood_group }}</div><p class="center-muted">{% if profile %}{% if available_to_donate %}Available to donate{% else %}Currently unavailable{% endif %}{% else %}Complete your profile first{% endif %}</p>{% if next_donation %}<div class="info-item"><span>Upcoming Donation</span><strong>{{ next_donation.donation_date|date:"d M Y" }}{% if next_donation.donation_time %} at {{ next_donation.donation_time|time:"H:i" }}{% endif %}</strong><small>{{ next_donation.hospital }}</small></div>{% endif %}<a class="btn primary full" href="{% url 'user_dashboard:profile' %}">Update Profile</a></section>
+</div>
+<section class="card request-card"><div class="card-head"><div><h2>Blood Requests Waiting for You: </h2><h5>Approved requests matching your blood group and donor availability.</h5></div><a href="{% url 'user_dashboard:donor_requests' %}">Open requests</a></div>
+
+<h4>
+    <b>{{ pending_donor_requests.count }}</b>
+    request(s) are assigned to you.
+</h4>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+     <tr>
+    
+       <th><b>Patient</b></th>
+       <th><b>Blood</b></th>
+       <th><b>Hospital</b></th>
+       <th><b>Urgency</b></th>
+       <th><b>Action</b></th>
+       
+      </tr>
+    </thead>
+    {% comment %} <tbody>
+    {% if pending_donor_requests %}
+       <tr>
+        <td colspan="4"><b>{{ pending_donor_requests }}</b> request(s) are assigned to you.</td>
+        <td><a class="btn primary" href="{% url 'user_dashboard:donor_requests' %}">Review</a></td>
+      </tr>
+    {% else %}
+       <tr>
+         <td colspan="5" class="empty">No donor requests waiting for you.</td>
+        </tr>
+    {% endif %}</tbody> {% endcomment %}
+
+
+{% comment %} <tbody>
+
+{% for r in pending_donor_requests %}
+
+<tr>
+
+    <!-- Patient -->
+    <td>
+        <b>{{ r.patient_name }}</b>
+        <small>{{ r.created_at|date:"d M Y, h:i A" }}</small>
+    </td>
+
+    <!-- Blood -->
+    <td>
+        <span class="blood">
+            {{ r.blood_group }}
+        </span>
+    </td>
+
+    <!-- Hospital -->
+    <td>
+        {{ r.hospital_name }}
+        <small>{{ r.city }}</small>
+    </td>
+
+    <!-- Urgency -->
+    <td>
+        <span class="urgency {{ r.urgency|lower }}">
+            {{ r.urgency }}
+        </span>
+    </td>
+
+    <!-- Action -->
+    <td>
+        <a class="btn primary"
+           href="{% url 'user_dashboard:donor_requests' %}">
+            Review
+        </a>
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="5" class="empty">
+        No donor requests waiting for you.
+    </td>
+</tr>
+
+{% endfor %}
+
+</tbody> {% endcomment %}
+
+
+
+<tbody>
+
+{% for r in pending_donor_requests %}
+
+<tr>
+
+    <!-- Patient -->
+    <td>
+        <b>{{ r.patient_name }}</b>
+        <small>
+            {{ r.created_at|date:"d M Y, h:i A" }}
+        </small>
+    </td>
+
+    <!-- Blood -->
+    <td>
+        <span class="blood">
+            {{ r.blood_group }}
+        </span>
+    </td>
+
+    <!-- Hospital -->
+    <td>
+        <b>{{ r.hospital_name }}</b>
+        <small>{{ r.city }}</small>
+    </td>
+
+    <!-- Urgency -->
+    <td>
+        <span class="urgency {{ r.urgency|lower }}">
+            {{ r.urgency }}
+        </span>
+    </td>
+
+    <!-- Action -->
+    <td>
+        <a class="btn primary"
+           href="{% url 'user_dashboard:donor_requests' %}">
+            Review
+        </a>
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="5" class="empty">
+        No donor requests waiting for you.
+    </td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+    
+    </table></div></section>
+{% endblock %}

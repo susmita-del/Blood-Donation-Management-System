@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Donations{% endblock %}{% block crumb %}Donations{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Donation Management</h1><p>Monitor scheduled donations and mark completed donations.</p></div></div>
+<form class="filters" method="get"><select name="status"><option value="">All statuses</option><option value="Scheduled" {% if selected_status == 'Scheduled' %}selected{% endif %}>Scheduled</option><option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option><option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option></select><button class="btn primary" type="submit">Filter</button></form>
+<div class="card table-card"><div class="table-wrap"><table><thead><tr><th>Donor</th><th>Blood</th><th>Patient / Requester</th><th>Hospital</th><th>Date / Time</th><th>Status</th><th>Action</th></tr></thead><tbody>
+{% for d in donations %}<tr><td><b>{{ d.donor.name }}</b><small>{{ d.donor.user.username }}</small></td><td><span class="blood">{{ d.blood_group }}</span></td><td>{% if d.request %}{{ d.request.patient_name }}<small>{{ d.request.requester.username }}</small>{% else %}Independent{% endif %}</td><td>{{ d.hospital }}</td><td>{{ d.donation_date|date:"d M Y" }}{% if d.donation_time %}<small>{{ d.donation_time|time:"H:i" }}</small>{% endif %}</td><td><span class="badge {{ d.status|lower }}">{{ d.status }}</span></td><td>{% if d.status == 'Scheduled' %}<form method="post" action="{% url 'admin_panel:complete_donation' d.pk %}">{% csrf_token %}<button class="btn success-btn" type="submit">Mark Completed</button></form>{% else %}—{% endif %}</td></tr>{% empty %}<tr><td colspan="7" class="empty">No donation records found.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

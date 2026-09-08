@@ -1,0 +1,6 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}FAQ{% endblock %}{% block crumb %}FAQ{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Frequently Asked Questions</h1><p>Quick answers about donating and requesting blood.</p></div></div>
+<div class="faq-list">{% for question,answer in faqs %}<details class="faq-item"><summary>{{ question }} <i class="fa-solid fa-chevron-down"></i></summary><p>{{ answer }}</p></details>{% endfor %}</div>
+{% endblock %}

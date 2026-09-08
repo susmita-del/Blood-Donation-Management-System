@@ -1,0 +1,108 @@
+{% extends "user_dashboard/base.html" %}
+{% block title %}Search Donors{% endblock %}{% block crumb %}Search Donors{% endblock %}
+{% block content %}
+<div class="page-head">
+   <div>
+      <h1>Search Blood Donors</h1>
+      <p>Find available donors by blood group and location.</p>
+    </div>
+</div>
+
+<form class="filters" method="get">
+   <input name="q" value="{{ q }}" placeholder="Search donor or state...">
+   
+   <select name="blood_group">
+      <option value="">All blood groups</option>
+      {% for value,label in groups %}
+        <option value="{{ value }}" {% if selected_group == value %}selected{% endif %}>
+          {{ label }}
+        </option>
+      {% endfor %}
+    </select>
+    
+    <input name="city" value="{{ city }}" placeholder="City">
+    
+    <button class="btn primary" type="submit">
+    <i class="fa-solid fa-magnifying-glass"></i> Search
+  </button>
+
+  {% if searched %}
+    <a class="btn" href="{% url 'user_dashboard:search_donors' %}">Clear</a>
+  {% endif %}
+</form>
+
+{% if not searched %}
+
+
+
+
+<div class="card search-placeholder">
+    <div class="search-placeholder-icon">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <h3>Search for a donor</h3>
+    <p>
+      Enter a donor name, choose a blood group, or enter a city and click
+      <strong>Search</strong> to see matching available donor profiles.
+    </p>
+  </div>
+
+{% else %}
+
+  <div class="search-result-heading">
+    <strong>Matching Donors</strong>
+    <span>{{ donors|length }} result{{ donors|length|pluralize }}</span>
+  </div>
+
+  <div class="donor-grid">
+    {% for donor in donors %}
+      <article class="donor-card">
+        <div class="donor-top">
+          <div class="donor-avatar">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <span class="blood">{{ donor.blood_group }}</span>
+        </div>
+
+        <h3>{{ donor.name|default:donor.user.get_full_name|default:donor.user.username }}</h3>
+
+        <p>
+          <i class="fa-solid fa-location-dot"></i>
+          {{ donor.city|default:"Location not added" }}
+          {% if donor.state %}, {{ donor.state }}{% endif %}
+        </p>
+
+        {% comment %} <p>
+          <i class="fa-solid fa-phone"></i>
+          {{ donor.phone|default:"Phone hidden" }}
+        </p> {% endcomment %}
+
+        {% if donor.phone %}
+          <a class="btn primary full" href="{% url 'user_dashboard:request_blood'  %}">
+            <i class="fa-solid fa-droplet"></i> Request Blood
+          </a>
+        {% else %}
+          <button class="btn full" disabled>Contact unavailable</button>
+        {% endif %}
+
+
+        
+      </article>
+
+{% comment %} <div class="donor-grid">
+{% for donor in donors %}
+  <article class="donor-card"><div class="donor-top"><div class="donor-avatar"><i class="fa-solid fa-user"></i></div><span class="blood">{{ donor.blood_group }}</span></div><h3>{{ donor.name|default:donor.user.get_full_name|default:donor.user.username }}</h3><p><i class="fa-solid fa-location-dot"></i> {{ donor.city|default:"Location not added" }}{% if donor.state %}, {{ donor.state }}{% endif %}</p><p><i class="fa-solid fa-phone"></i> {{ donor.phone|default:"Phone hidden" }}</p>{% if donor.phone %}<a class="btn primary full" href="tel:{{ donor.phone }}">Contact</a>{% else %}<button class="btn full" disabled>Contact</button>{% endif %}</article> {% endcomment %}
+
+
+{% empty %}
+   <div class="card empty full-width">
+    No available donors match your search.
+    {% comment %} <h3>No matching donor found</h3>
+        <p>Try another blood group, city, donor name or state.</p> {% endcomment %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+{% endblock %}

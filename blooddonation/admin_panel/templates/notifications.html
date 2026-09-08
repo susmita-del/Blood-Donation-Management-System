@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Notifications{% endblock %}{% block crumb %}Notifications{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Admin Notifications</h1><p>New blood requests and important user activity.</p></div><form method="post" action="{% url 'admin_panel:mark_all_notifications_read' %}">{% csrf_token %}<button class="btn" type="submit">Mark all as read</button></form></div>
+<div class="notification-list">
+{% for item in notifications %}
+<div class="notification {% if not item.is_read %}unread{% endif %}"><span class="notification-icon"><i class="fa-solid fa-bell"></i></span><div class="notification-body"><p>{{ item.message }}</p><small>{{ item.created_at|date:"d M Y, h:i A" }}</small></div>{% if not item.is_read %}<form method="post" action="{% url 'admin_panel:mark_notification_read' item.pk %}">{% csrf_token %}<button class="btn small" type="submit">Mark read</button></form>{% else %}<span class="read-label">Read</span>{% endif %}</div>
+{% empty %}<div class="card empty">No notifications yet.</div>{% endfor %}
+</div>
+{% endblock %}

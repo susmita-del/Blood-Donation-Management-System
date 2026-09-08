@@ -1,22 +1,3 @@
-# from django.urls import path
-# from . import views
-
-# urlpatterns = [
-
-#     path("",views.admin_dashboard,name="admin_dashboard"),
-
-#     path("donors/",views.manage_donors,name="manage_donors"),
-
-#     path("requests/",views.blood_requests,name="blood_requests"),
-
-#     path("approved-requests/",views.approved_requests,name="approved_requests"),
-
-#     path("users/",views.manage_users,name="manage_users"),
-
-#     path("reports/",views.reports,name="reports"),
-# ]
-
-
 from django.urls import path
 from . import views
 
@@ -38,6 +19,7 @@ urlpatterns = [
     path("requests/", views.requests_page, name="requests"),
     path("requests/<int:pk>/approve/", views.approve_request, name="approve_request"),
     path("requests/<int:pk>/reject/", views.reject_request, name="reject_request"),
+    path("requests/<int:pk>/assign-donor/", views.assign_donor,name="assign_donor"),
     path("approved-requests/", views.approved_requests, name="approved_requests"),
 
     #Users
@@ -46,4 +28,11 @@ urlpatterns = [
 
     #Reports
     path("reports/", views.reports, name="reports"),
+
+
+    path("notifications/", views.notifications, name="notifications"),
+    path("notifications/<int:pk>/read/", views.mark_notification_read, name="mark_notification_read"),
+    path("notifications/read-all/", views.mark_all_notifications_read, name="mark_all_notifications_read"),
+    path("donations/", views.donations, name="donations"),
+    path("donations/<int:pk>/complete/", views.complete_donation, name="complete_donation"),
 ]

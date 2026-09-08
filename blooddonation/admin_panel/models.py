@@ -1,18 +1,19 @@
-# Create your models here.
-# from system.models import Donor
 from django.contrib.auth.models import User
 from django.db import models
+
+
 
 BLOOD_GROUPS = [
     ("O+", "O+"), ("O-", "O-"), ("A+", "A+"), ("A-", "A-"),
     ("B+", "B+"), ("B-", "B-"), ("AB+", "AB+"), ("AB-", "AB-"),
 ]
 
+
 class DonorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="donor_profile")
     name = models.CharField(max_length=100)
     age = models.IntegerField(default=18)
-    gender = models.CharField(max_length=10, choices=[('Male','Male'),('Female','Female')])
+    gender = models.CharField(max_length=10, choices=[("Male", "Male"), ("Female", "Female")])
     phone = models.CharField(max_length=20, blank=True)
     blood_group = models.CharField(max_length=3, choices=BLOOD_GROUPS, default="O+")
     city = models.CharField(max_length=80, blank=True)
@@ -27,7 +28,13 @@ class DonorProfile(models.Model):
 
 class BloodRequest(models.Model):
     URGENCY = [("Normal", "Normal"), ("Urgent", "Urgent"), ("Critical", "Critical")]
-    STATUS = [("Pending", "Pending"), ("Approved", "Approved"), ("Rejected", "Rejected"), ("Completed", "Completed")]
+    STATUS = [
+        ("Pending", "Pending"), ("Approved", "Approved"),
+        ("Rejected", "Rejected"), ("Completed", "Completed"),
+    ]
+    DONOR_RESPONSE = [
+        ("Waiting", "Waiting"), ("Accepted", "Accepted"), ("Declined", "Declined"),
+    ]
 
     patient_name = models.CharField(max_length=120)
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blood_requests")
@@ -37,8 +44,17 @@ class BloodRequest(models.Model):
     urgency = models.CharField(max_length=20, choices=URGENCY, default="Normal")
     additional_details = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default="Pending")
-    created_at = models.DateTimeField(auto_now_add=True)
+    notified_donors = models.ManyToManyField(
+        DonorProfile, blank=True, related_name="notified_blood_requests"
+    )
+    assigned_donor = models.ForeignKey(
+        DonorProfile, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="assigned_blood_requests"
+    )
+    donor_response = models.CharField(max_length=20, choices=DONOR_RESPONSE, default="Waiting")
     reviewed_at = models.DateTimeField(null=True, blank=True)
+    donor_responded_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.patient_name} - {self.blood_group}"
@@ -47,10 +63,15 @@ class BloodRequest(models.Model):
 class Donation(models.Model):
     STATUS = [("Scheduled", "Scheduled"), ("Completed", "Completed"), ("Cancelled", "Cancelled")]
     donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE, related_name="donations")
+    request = models.OneToOneField(
+        BloodRequest, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name="donation"
+    )
     hospital = models.CharField(max_length=150)
     blood_group = models.CharField(max_length=3, choices=BLOOD_GROUPS)
     donation_date = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS, default="Completed")
+    donation_time = models.TimeField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS, default="Scheduled")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -65,4 +86,5 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.message
+
 
