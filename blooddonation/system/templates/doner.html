@@ -18,10 +18,19 @@
     .donor-card{ border:1px solid #eee; border-radius:10px; padding:15px; text-align:center; background:#fff; }
     .btn-maroon{ background:#8B0000; color:white; font-size:13px; padding:3px 15px; }
     .btn-maroon:hover{ background:#5a0000; color:white; }
+    .doner-page-wrapper{
+    min-height: 68vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 15px;
+    padding-bottom: 30px;
+  }
   </style>
 </head>
 <body>
-<div class="container mt-4">
+
+<div class="doner-page-wrapper container mt-4">
   <h5 class="fw-bold">Search Blood Donors</h5>
   <small class="text-muted">Home > Search Donor</small>
 
@@ -56,8 +65,11 @@
     </div>
   </form>
 
-  <!-- Available Donors -->
-  <h6 class="mt-4 fw-bold">Available Donors</h6>
+ <!-- Available Donors -->
+{% if doner is None %}
+  <p class="text-center text-muted mt-4">Please select Blood Group / State / City and click Search.</p>
+{% else %}
+  <h6 class="mt-4 fw-bold">Available Donors ({{ doner.count }})</h6>
   <div class="row mt-2">
     {% for d in doner %}
     <div class="col-md-4 mb-3">
@@ -71,12 +83,14 @@
             <small class="text-success" style="font-size:11px;">Available</small>
           </div>
         </div>
-      <a href="https://wa.me/91{{ donor.phone }}?text=Hi%20{{ donor.name }},%20I%20need%20{{ donor.blood_group }}%20blood%20in%20{{ donor.city }}" target="_blank" class="btn-maroon" style="text-decoration:none;">Contact</a>
+        <a href="{% url 'request_blood' %}?donor_id={{ d.id }}&blood_group={{ d.blood_group }}" class="btn btn-danger btn-sm mt-2 w-100">Request Blood</a>
       </div>
     </div>
     {% empty %}
-    <p class="text-center text-muted mt-3">No Donors Found</p>
+    <p class="text-center text-muted mt-3">No Donors Found for this search.</p>
     {% endfor %}
+  </div>
+{% endif %}
   </div>
 </div>
 {% endblock %}

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Donor
 from .models import BloodRequest
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -65,22 +66,35 @@ def register_view(request):
 
 
 def search_donor(request):
-    doner = Donor.objects.filter(is_available=True)
-
     blood_group = request.GET.get('blood_group')
     state = request.GET.get('state')
     city = request.GET.get('city')
 
-    # Select thakle filter korbe na
-    if blood_group and blood_group != "Select":
-        doner = doner.filter(blood_group=blood_group)
-    if state and state != "Select" and state != "":
-        doner = doner.filter(state__icontains=state)
-    if city and city != "Select" and city != "":
-        doner = doner.filter(city__icontains=city)
+    # prothome kichu dekhabe na
+    doner = Donor.objects.none()
+    
+    # user jodi sotti search kore, tokhoni filter hobe
+    is_search = False
+    if (blood_group and blood_group != "Select") or (state and state != "Select" and state != "") or (city and city != "Select" and city != ""):
+        is_search = True
+
+    if is_search:
+        doner = Donor.objects.filter(is_available=True)
+        if blood_group and blood_group != "Select":
+            doner = doner.filter(blood_group=blood_group)
+        if state and state != "Select" and state != "":
+            doner = doner.filter(state__icontains=state)
+        if city and city != "Select" and city != "":
+            doner = doner.filter(city__icontains=city)
+
+    # jodi search na hoy, tahole faka pathabo
+    if not is_search:
+        doner = None
 
     return render(request, 'doner.html', {'doner': doner})
 
+
+@login_required(login_url='/login/')  # login na korle /login e pathabe
 def blood_request_view(request):
     if request.method == 'POST':
         BloodRequest.objects.create(
@@ -98,3 +112,23 @@ def blood_request_view(request):
 def request_list_view(request): # sob request dekhar jonno
     all_requests = BloodRequest.objects.all().order_by('-created_at')
     return render(request, 'request_list.html', {'requests': all_requests})
+
+from .models import DonorRegistration # Donor noy
+
+@login_required(login_url='/login/')  # login na korle /login e pathabe
+def become_a_donor(request):
+    if request.method == 'POST':
+        DonorRegistration.objects.create(
+            name=request.POST.get('name'),
+            age=request.POST.get('age'),
+            gender=request.POST.get('gender'),
+            blood_group=request.POST.get('blood_group'),
+            phone=request.POST.get('phone'),
+            email=request.POST.get('email'),
+            state=request.POST.get('state'),
+            city=request.POST.get('city'),
+            last_donation=request.POST.get('last_donation') or None,
+            address=request.POST.get('address')
+        )
+        return render(request, 'become_donor.html', {'success': True})
+    return render(request, 'become_donor.html')

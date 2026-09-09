@@ -1,0 +1,72 @@
+ {% load static %}
+{% include 'header.html' %}
+
+<div style="max-width:650px; margin:40px auto; padding:30px; box-shadow:0 0 15px #ddd; border-radius:12px;">
+  <h2 style="text-align:center; color:#d90429;">Become a Blood Donor</h2>
+  <p style="text-align:center;">Save Life, Donate Blood</p>
+  {% if success %}
+    <p style="color:green; text-align:center; font-weight:bold; background:#e8ffe8; padding:10px; border-radius:5px;">Thank you! You are registered as a donor.</p>
+  {% endif %}
+  
+  <form method="POST">
+    {% csrf_token %}
+
+    <div style="display:flex; gap:15px;">
+      <div style="flex:1;">
+        <label>Full Name *</label>
+        <input type="text" name="name" required style="width:100%; padding:10px; margin:8px 0;">
+      </div>
+      <div style="flex:1;">
+        <label>Age *</label>
+        <input type="number" name="age" min="18" max="65" required style="width:100%; padding:10px; margin:8px 0;">
+      </div>
+    </div>
+
+    <div style="display:flex; gap:15px;">
+      <div style="flex:1;">
+        <label>Gender *</label>
+        <select name="gender" required style="width:100%; padding:10px; margin:8px 0;">
+          <option value="">Select</option>
+          <option>Male</option><option>Female</option><option>Other</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label>Blood Group *</label>
+        <select name="blood_group" required style="width:100%; padding:10px; margin:8px 0;">
+          <option value="">Select</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Phone Number *</label>
+    <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="10 digit number" required style="width:100%; padding:10px; margin:8px 0;">
+
+    <label>Email</label>
+    <input type="email" name="email" style="width:100%; padding:10px; margin:8px 0;">
+
+    <div style="display:flex; gap:15px;">
+      <div style="flex:1;">
+        <label>State *</label>
+        <select name="state" required style="width:100%; padding:10px; margin:8px 0;">
+          <option>West Bengal</option><option>Jharkhand</option><option>Bihar</option><option>Odisha</option><option>Other</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label>City / District *</label>
+        <input type="text" name="city" placeholder="Ghatal" required style="width:100%; padding:10px; margin:8px 0;">
+      </div>
+    </div>
+
+
+    <label>Full Address</label>
+    <textarea name="address" rows="2" style="width:100%; padding:10px; margin:8px 0;"></textarea>
+
+    <button type="submit" style="width:100%; padding:14px; background:#d90429; color:white; border:none; border-radius:6px; margin-top:15px; font-size:16px; cursor:pointer;">
+      Register Now
+    </button>
+  </form>
+</div>
+
+{% include 'footer.html' %}
