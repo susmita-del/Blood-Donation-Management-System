@@ -333,7 +333,7 @@ def users(request):
     q = request.GET.get("q", "").strip()
     qs = User.objects.order_by("-date_joined")
     if q:
-        qs = qs.filter(Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(email__icontains=q)|Q(userprofile__phone__icontains=q))
+        qs = qs.filter(Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q) | Q(email__icontains=q))
     return render(request, "users.html", {"users": qs, "q": q, "active": "users"})
 
 

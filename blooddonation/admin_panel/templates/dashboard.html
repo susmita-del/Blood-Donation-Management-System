@@ -35,3 +35,16 @@
 </div>
 <script>document.getElementById('today').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});</script>
 {% endblock %}
+
+<script>
+document.getElementById('today').textContent=new Date().toLocaleDateString(
+    'en-IN',
+    {day:'numeric',month:'short',year:'numeric'}
+);
+</script>
+
+<script>
+setTimeout(function () {
+    window.location.reload();
+}, 30000);
+</script>

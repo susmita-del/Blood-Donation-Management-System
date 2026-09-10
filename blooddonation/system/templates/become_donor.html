@@ -5,7 +5,12 @@
   <h2 style="text-align:center; color:#d90429;">Become a Blood Donor</h2>
   <p style="text-align:center;">Save Life, Donate Blood</p>
   {% if success %}
-    <p style="color:green; text-align:center; font-weight:bold; background:#e8ffe8; padding:10px; border-radius:5px;">Thank you! You are registered as a donor.</p>
+    <p style="color:green; text-align:center; font-weight:bold; background:#e8ffe8; padding:10px; border-radius:5px;">Thank you! Your donor registration has been submitted successfully.</p>
+    <script>
+    setTimeout(function () {
+        window.location.href = "{% url 'home' %}";
+    }, 5000);
+</script>
   {% endif %}
   
   <form method="POST">
@@ -68,5 +73,7 @@
     </button>
   </form>
 </div>
+
+
 
 {% include 'footer.html' %}
