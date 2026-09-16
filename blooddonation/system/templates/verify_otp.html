@@ -1,0 +1,70 @@
+
+
+{% load static %}
+
+
+{% include 'header.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/verify_otp.css' %}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+
+</head>
+
+<body>
+
+<div class="otp-container">
+
+    <div class="otp-card">
+
+        <div class="icon">🔐</div>
+
+        <h2>Verify OTP</h2>
+
+        <p class="subtitle">
+            Enter the 6-digit OTP sent to your email.
+        </p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="otp"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                required
+            >
+
+            <button type="submit">Verify OTP</button>
+        </form>
+
+        <p class="back-text">
+            Didn't receive the OTP?
+            <a href="{% url 'forgot_password' %}">Try Again</a>
+        </p>
+
+    </div>
+
+</div>
+
+    {% include 'footer.html' %}
+
+
+
+</body>
+</html>

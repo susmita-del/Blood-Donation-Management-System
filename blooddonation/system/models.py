@@ -27,12 +27,32 @@ class Donor(models.Model):  # Capital D
         return f"{self.name} - {self.blood_group}"
 
 
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
 
     def __str__(self):
         return self.user.email
+
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email
+
+        
 class BloodRequest(models.Model):
     patient_name = models.CharField(max_length=100)
     hospital_name = models.CharField(max_length=100)

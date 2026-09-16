@@ -5,6 +5,14 @@ from django.contrib import messages
 from .models import Donor
 from .models import BloodRequest
 
+
+
+import random
+from django.core.mail import send_mail
+from .models import PasswordResetOTP
+
+from .models import ContactMessage, UserProfile
+
 # new added
 from admin_panel.models import DonorProfile
 from admin_panel.models import BloodRequest as AdminBloodRequest
@@ -29,8 +37,20 @@ def about(request):
     return render(request,'about.html')
 
 def contact(request):
-    return render(request,'contact.html')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
 
+        ContactMessage.objects.create(
+            name=name,
+            email=email,
+            message=message
+        )
+
+        return redirect('contact')
+
+    return render(request, 'contact.html')
 
 
 
@@ -50,7 +70,110 @@ def login_view(request):
     return render(request, 'login.html', {'error': error})
 
 
+def forgot_password(request):
+    error = None
+    success = None
 
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+
+            otp = str(random.randint(100000, 999999))
+
+            PasswordResetOTP.objects.filter(user=user).delete()
+
+            PasswordResetOTP.objects.create(
+                user=user,
+                otp=otp
+            )
+
+            send_mail(
+                'Password Reset OTP',
+                f'Your password reset OTP is: {otp}',
+                'your_email@gmail.com',
+                [email],
+                fail_silently=False,
+            )
+
+            request.session['reset_email'] = email
+
+            return redirect('verify_otp')
+
+        except User.DoesNotExist:
+            error = 'Email does not exist.'
+
+    return render(
+        request,
+        'forgot_password.html',
+        {
+            'error': error,
+            'success': success
+        }
+    )
+
+
+
+
+
+
+
+
+def verify_otp(request):
+    error = None
+
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        email = request.session.get('reset_email')
+
+        try:
+            user = User.objects.get(email=email)
+            otp_obj = PasswordResetOTP.objects.get(
+                user=user,
+                otp=otp
+            )
+
+            return redirect('reset_password')
+
+        except PasswordResetOTP.DoesNotExist:
+            error = 'Invalid OTP.'
+
+    return render(
+        request,
+        'verify_otp.html',
+        {
+            'error': error
+        }
+    )
+
+
+
+def reset_password(request):
+    email = request.session.get('reset_email')
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password != confirm_password:
+            return render(
+                request,
+                'reset_password.html',
+                {'error': 'Passwords do not match.'}
+            )
+
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.save()
+
+        PasswordResetOTP.objects.filter(user=user).delete()
+
+        request.session.pop('reset_email', None)
+
+        return redirect('login')
+
+    return render(request, 'reset_password.html')
 
 
 def register_view(request):
@@ -69,7 +192,7 @@ def register_view(request):
             error = "Email already exists"
         else:
             user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name)
-        
+            UserProfile.objects.create(user=user, phone=phone)
             success = "Registration Successful! Please Login."
         
     return render(request, 'register.html', {'error': error, 'success': success})

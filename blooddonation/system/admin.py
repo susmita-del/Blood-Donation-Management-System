@@ -7,6 +7,12 @@ from .models import BloodRequest
 
 admin.site.register(BloodRequest)
 
+from .models import ContactMessage
+admin.site.register(ContactMessage)
+
+from .models import UserProfile
+admin.site.register(UserProfile)
+
 
 from .models import DonorRegistration
 
