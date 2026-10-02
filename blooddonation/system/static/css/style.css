@@ -86,84 +86,975 @@ nav ul li a:hover{
     background:#b71c1c !important;
 }
 
-/* ========== Hero Section ========== */
 
-.hero{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:70px 8%;
-    background:linear-gradient(rgba(214,40,40,.9),
-    rgba(214,40,40,.9)),
-    url("../images/bg.jpg");
+/* =========================
+   SESSION COUNTDOWN
+========================= */
 
-    background-size:cover;
-    background-position:center;
+.session-countdown {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
-.hero-text{
-    width:50%;
+.session-countdown span {
+    font-size: 16x;
+    color: #555;
 }
+
+.session-countdown strong {
+    font-size: 15x;
+    font-weight: 600;
+    color: #d62828;
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================
+  SESSION LOGOUT BUTTON
+========================= */
+
+#logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    background: #b71c1c;
+    color: #fff;
+    transition: .3s;
+}
+
+#logout-button:hover {
+    background: #7a58ff;
+}
+
+
+
+
+
+/* ========== Hero MAIN AREA Section ========== */
+ .hero { 
+    position: relative;
+
+    min-height: 768px;
+
+    padding: 75px 8% 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 35px;
+
+    overflow: hidden;
+
+   background:
+    radial-gradient(
+        ellipse 500px 300px at 0% 0%,
+        rgba(255, 145, 145, 0.45),
+        rgba(255, 190, 190, 0.18) 55%,
+        transparent 75%
+    ),
+
+    radial-gradient(
+        ellipse 450px 350px at 0% 65%,
+        rgba(255, 180, 180, 0.18),
+        transparent 72%
+    ),
+
+    radial-gradient(
+        circle at 88% 25%,
+        rgba(255, 120, 120, 0.15),
+        transparent 35%
+    ),
+
+    linear-gradient(
+        115deg,
+        #ffffff 0%,
+        #fffafa 38%,
+        #fff2f2 72%,
+        #ffdede 100%
+    );
+} 
+
+
+/* =========================
+   SOFT DECORATIVE SHAPES  / Background circles 
+========================= */
+
+.hero-bg-circle-one {
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    left: -120px;
+    top: 48%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #ff9b9b 0%,
+            #ff9999 55%,
+            #ffaaaa 100%
+        );
+
+    transform: translateY(-50%);
+
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-bg-circle-two {
+    position: absolute;
+
+    width: 320px;
+    height: 200px;
+
+    left: -240px;
+    top: 550px;
+   
+    border-radius: 50%;
+
+    background: #ff9999;
+
+    z-index: 2;
+    pointer-events: none;
+}
+
+  /* =========================================================
+   BACKGROUND STYLE
+========================================================= */
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 520px;
+    height: 250px;
+
+    left: -180px;
+    top: -175px;
+
+    
+    background:
+        linear-gradient(
+            135deg,
+            #ff9999 0%,
+            #ffb5b5 55%,
+            rgba(255,190,190,.25) 100%
+        );
+
+    
+    border-radius: 0 0 70% 0;
+
+    transform: rotate(-4deg);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* RIGHT BACKGROUND GLOW */
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -220px;
+    top: -230px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 100, 100, 0.18),
+            rgba(255, 100, 100, 0.06) 55%,
+            transparent 72%
+        );
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+
+/* =========================
+    Hero text (LEFT CONTENT)
+========================= */
+
+.hero-text {
+    width: 48%;
+
+    position: relative;
+
+    z-index: 15;
+
+    padding-bottom: 35px;
+}
+
+
+/* =========================
+   TOP TAG
+========================= */
+
+.hero-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    color: #df272c;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.hero-tag i {
+    color: #df272c;
+    font-size: 18px;
+}
+
+
+/* =========================
+   RED LINE ABOVE HEADING
+========================= */
+
+.hero-heading-line {
+    width: 155px;
+
+    height: 3px;
+
+    background: #df272c;
+
+    border-radius: 10px;
+
+    margin: 17px;
+}
+
+
+/* =========================
+   MAIN HEADING
+========================= */
 
 .hero-text h1{
-    color:#fff;
-    font-size:60px;
-    line-height:75px;
-    margin-bottom:20px;
+    margin: 0 0 28px;
+    color:#171717;
+    font-size:68px;
+    line-height:1.02;
+    font-weight:800;
+    /* margin-bottom:28px; */
+    letter-spacing:-2.5px;
+    white-space: normal;
 }
 
-.hero-text p{
-    color:#fff;
-    font-size:18px;
-    line-height:30px;
-    margin-bottom:30px;
+.hero-text h1 span{
+    color:#df272c;
 }
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.hero-text p{
+    max-width:600px;
+    margin: 0 0 32px;
+    color:#555;
+    font-size:19px;
+    line-height:1.65;
+    /* margin-bottom:32px; */
+    font-weight: 400;
+
+    letter-spacing: normal;
+
+    word-spacing: 3px;
+
+    white-space: normal;
+}
+
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 .hero-btn{
     display:flex;
-    gap:15px;
+    align-items:center;
+    gap:18px;
+    margin-bottom:35px;
 }
+
 
 .donor-btn,
 .request-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-height: 64px;
+    /* padding:15px 28px; */
+    padding: 0 30px;
+    border-radius:34px;
+    font-size: 17px;
+    font-weight:700;
     text-decoration:none;
-    padding:14px 28px;
-    border-radius:6px;
-    font-weight:600;
-    transition:.3s;
+
+    /* transition:all .3s ease; */
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
 }
 
+
+/* Become Donor */
 .donor-btn{
-    background:#fff;
-    color:#d62828;
+     color:#df272c;
+    border:2px solid #df272c;
+    background: rgba(255,255,255,.55);
+    
+    box-shadow:
+        0 12px 28px rgba(220, 35, 42, .20);
 }
 
-.request-btn{
-    border:2px solid #fff;
-    color:#fff;
-}
 
 .donor-btn:hover{
-    background:#ffd9d9;
+    background:#b71c1c;
+    color:#fff;
+
+    transform:translateY(-3px);
+
+   
+     box-shadow:
+        0 16px 32px rgba(220, 35, 42, .28);
 }
+
+/* Request Blood */
+.request-btn{
+    border:2px solid #df272c;
+    color:#df272c;
+    background: rgba(255,255,255,.55);
+     box-shadow:
+        0 12px 28px rgba(220, 35, 42, .20);
+
+}
+
 
 .request-btn:hover{
-    background:#fff;
-    color:#d62828;
+    background:#b71c1c;
+    color:#fff;
+    
+
+    box-shadow:
+        0 16px 32px rgba(220, 35, 42, .28);
+    transform:translateY(-3px);
 }
+
+
+/* =========================
+   HERO FEATURE ITEMS
+========================= */
+
+.hero-features{
+    display:flex;
+    align-items:center;
+    /* gap:26px; */
+    gap: 0;
+    margin-top:10px;
+    position: relative;
+
+    z-index: 15;
+}
+
+
+.hero-feature {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 58px;
+
+    padding-right: 30px;
+
+    margin-right: 26px;
+
+    border-right:
+        1px solid rgba(70,70,70,.20);
+}
+
+
+.hero-feature:last-child {
+    border-right: none;
+
+    margin-right: 0;
+
+    padding-right: 0;
+}
+
+.hero-feature i{
+    /* width:42px;
+    height:42px; */
+    width: 58px;
+    height: 58px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    /* background:#ffe4e4;
+    color:#d62828; */
+     color: #df272c;
+
+    background:
+        rgba(255, 92, 92, .12);
+    font-size:22px;
+}
+
+
+.hero-feature span {
+    color: #333;
+
+    font-size: 15px;
+
+    line-height: 1.45;
+
+    font-weight: 500;
+    letter-spacing: normal;
+
+    word-spacing: 3px;
+
+    white-space: normal;
+}
+
+
+
+.hero-wave {
+    position: absolute;
+    left: -5%;
+    width: 110%;
+
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+/* =========================
+   SINGLE BOTTOM OVAL WAVE
+========================= */
+
+.wave-back {
+    bottom: -130px;   
+
+    height: 200px;
+
+    background: linear-gradient(
+        105deg,
+        #ff7777 0%,
+        #df2932 50%,
+        #b5121b 80%
+    );
+
+    border-radius:
+        50% 50% 0 0 /
+        60% 60% 0 0;
+
+    z-index: 1;
+}
+
+
+
+
+
+.hero-text,
+.hero-image{
+    position:relative;
+    z-index:5;
+}
+
+
+
+/* Hero image */
 
 .hero-image{
-    width:40%;
-    text-align:center;
+    width:52%;
+
+    min-height:550px;
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:3;
 }
 
-.hero-image img{
+.hero-circle{
+    position:absolute;
+
+    /* width:540px;
+    height:540px; */
+    width:600px;
+    height:600px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(214,40,40,.18),
+            rgba(255,120,120,.08),
+            transparent 68%
+        );
+
+    right:-30px;
+    top:-30px;
+
+    z-index:1
+}
+.hero-image-card{
+    position:relative;
+
+    width:520px;
+    height:500px;
+
+    border-radius:45% 45% 48% 48%;
+
+    overflow:hidden;
+
+    background:transparent;
+
+    border:8px solid rgba(255,255,255,.9);
+
+    box-shadow:
+        0 25px 70px rgba(180,30,30,.18);
+
+    animation:heroFloat 5s ease-in-out infinite;
+
+    z-index:3;
+}
+
+
+.hero-image-card img{
     width:100%;
-    max-width:420px;
+    height:100%;
+
+    object-fit:cover;
+
+     object-position:center;
+
+    display:block;
+}
+
+
+/* Image overlay */
+
+.image-overlay{
+    position:absolute;
+
+    left:20px;
+    right:20px;
+    /* bottom:20px; */
+    bottom:18px;
+
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 16px;
+
+    /* border-radius:14px; */
+    border-radius:25px;
+
+    background:rgba(255,255,255,.92);
+
+    color:#d62828;
+
+    font-size:13px;
+    font-weight:600;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.10);
+
+    backdrop-filter:blur(6px);
+}
+
+
+/* Floating icons */
+
+.floating-icon{
+    position:absolute;
+
+    /* width:56px;
+    height:56px; */
+    width:62px;
+    height:62px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    /* background:#fff; */
+     background:rgba(255,255,255,.96);
+
+    color:#d62828;
+
+    font-size:22px;
+
+    /* box-shadow:
+        0 10px 25px rgba(0,0,0,.12); */
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.13);
+
+    z-index:10;
+
+    animation:floatingIcon 4s ease-in-out infinite;
+}
+
+
+.floating-drop{
+    /* top:48px; */
+    top:40px;
+    left:5px;
+    animation:floatingIcon 4s ease-in-out infinite;
+}
+
+
+
+.floating-heart{
+    right:-5px;
+    bottom:55px;
+
+    animation:
+        floatingIcon 4s ease-in-out infinite;
+
+    animation-delay:1.2s;
+}
+
+
+
+
+
+/* =========================
+   ECG HEARTBEAT
+========================= */
+
+.ecg-line {
+    position: absolute;
+
+    /* আরও right side */
+    right: -110px;
+    top: 95px;
+
+    width: 190px;
+    height: 65px;
+
+    z-index: 20;
+    pointer-events: none;
+    overflow: visible;
+}
+
+
+/* =========================
+   MAIN ECG LINE
+========================= */
+
+.ecg-line span {
+    position: absolute;
+
+    left: 0;
+    top: 31px;
+
+    width: 190px;
+    height: 2px;
+
+    background: #d62828;
+
+    margin: 0;
+    padding: 0;
+
+    border-radius: 10px;
+
+    /* subtle glow */
+    box-shadow: 0 0 3px rgba(214, 40, 40, 0.2);
+
+    /* overflow: visible; */
+
+    animation: ecgGlow 2.2s ease-in-out infinite;
+}
+
+
+/* =========================
+   HEARTBEAT PULSE
+========================= */
+
+.ecg-line span::before {
+    content: "";
+
+    position: absolute;
+
+    left: 35px;
+    top: -32px;
+
+    width: 105px;
+    height: 64px;
+
+    background: #d62828;
+
+    clip-path: polygon(
+        0% 45%,
+        25% 45%,
+        34% 45%,
+
+        /* main heartbeat */
+        43% 5%,
+        48% 5%,
+        55% 45%,
+
+        /* small heartbeat */
+        65% 45%,
+        73% 25%,
+        78% 25%,
+        84% 45%,
+
+        100% 45%,
+
+        /* lower edge */
+        100% 55%,
+        84% 55%,
+        78% 35%,
+        73% 55%,
+        55% 55%,
+
+        48% 18%,
+        43% 18%,
+
+        34% 55%,
+        25% 55%,
+        0% 55%
+    );
+
+    animation: heartbeatPulse 2.2s ease-in-out infinite;
+}
+
+
+/* =========================
+   MOVING GLOW DOT
+========================= */
+
+.ecg-line span::after {
+    content: "";
+
+    position: absolute;
+
+    top: -3px;
+    left: 0;
+
+    width: 6px;
+    height: 6px;
+
+    background: #ff3b3b;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 5px #ff3b3b,
+        0 0 10px rgba(255, 59, 59, 0.65),
+        0 0 16px rgba(255, 59, 59, 0.35);
+
+    animation: ecgTravel 2.2s linear infinite;
+}
+
+
+/* =========================
+   GLOW ANIMATION
+========================= */
+
+@keyframes ecgGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 3px rgba(214, 40, 40, 0.20);
+    }
+
+    45% {
+        box-shadow:
+            0 0 7px rgba(214, 40, 40, 0.45);
+    }
+
+    55% {
+        box-shadow:
+            0 0 3px rgba(214, 40, 40, 0.20);
+    }
+}
+
+
+/* =========================
+   HEARTBEAT ANIMATION
+========================= */
+
+@keyframes heartbeatPulse {
+
+    0%,
+    35%,
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: center;
+    }
+
+    42% {
+        opacity: 1;
+        transform: scaleY(1.08);
+        transform-origin: center;
+    }
+
+    48% {
+        opacity: 0.92;
+        transform: scaleY(0.96);
+        transform-origin: center;
+    }
+
+    54% {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: center;
+    }
+}
+
+
+/* =========================
+   MOVING LIGHT
+========================= */
+
+@keyframes ecgTravel {
+
+    /* Start */
+    0% {
+        left: 0;
+        top: -3px;
+        opacity: 0;
+    }
+
+    8% {
+        left: 15px;
+        top: -3px;
+        opacity: 1;
+    }
+
+    /* Move toward heartbeat */
+    30% {
+        left: 32px;
+        top: -3px;
+        opacity: 1;
+    }
+
+    /* Climb the heartbeat spike */
+    40% {
+        left: 74px;
+        top: -30px;
+        opacity: 1;
+    }
+
+    /* Peak of heartbeat */
+    45% {
+        left: 80px;
+        top: -34px;
+        opacity: 1;
+    }
+
+    /* Come down */
+    50% {
+        left: 87px;
+        top: -3px;
+        opacity: 1;
+    }
+
+    /* Continue on line */
+    65% {
+        left: 110px;
+        top: -3px;
+        opacity: 1;
+    }
+
+    90% {
+        left: 170px;
+        top: -3px;
+        opacity: 1;
+    }
+
+    /* Finish */
+    100% {
+        left: 183px;
+        top: -3px;
+        opacity: 0;
+    }
+}
+
+/* Animations */
+
+@keyframes heroFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+}
+
+
+@keyframes floatingIcon{
+
+    0%,100%{
+        transform:translateY(0) rotate(0deg);
+    }
+
+    50%{
+        transform:translateY(-12px) rotate(4deg);
+    }
+
 }
 
 /* ==========================
-   Feature Section
+   Feature CARD Section
 ========================== */
 
 .feature{
@@ -182,6 +1073,8 @@ nav ul li a:hover{
     box-shadow:0 5px 15px rgba(0,0,0,.08);
     transition:0.3s;
 }
+
+
 
 .card:hover{
     transform:translateY(-10px);
@@ -207,48 +1100,95 @@ nav ul li a:hover{
 }
 
 
+
+
 /* ==========================
    Tablet Responsive
 ========================== */
 
 @media (max-width:992px){
 
-header{
-    flex-direction:column;
-    gap:20px;
+    header{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .hero{
+        min-height:auto;
+        flex-direction:column;
+        text-align:center;
+        padding:60px 5%;
+    }
+
+    .hero-text,
+    .hero-image{
+        width:100%;
+    }
+
+    .hero-text h1{
+        font-size:50px;
+        line-height:1.1;
+    }
+
+    .hero-text p{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-btn,
+    .hero-features{
+        justify-content:center;
+    }
+
+    .hero-image{
+        min-height:450px;
+        margin-top:10px;
+    }
+
+    .hero-image-card{
+        width:390px;
+        height:390px;
+    }
+
+    .hero-circle{
+        width:450px;
+        height:450px;
+    }
+
+    .feature{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
 
-nav ul{
-    flex-wrap:wrap;
-    justify-content:center;
-}
 
-.hero{
-    flex-direction:column;
-    text-align:center;
-}
 
-.hero-text,
-.hero-image{
-    width:100%;
-}
+/* =========================================================
+   DESKTOP ONLY
+========================================================= */
 
-.hero-text h1{
-    font-size:46px;
-    line-height:58px;
-}
+@media (min-width: 993px) {
 
-.hero-image{
-    margin-top:40px;
-}
+    .hero {
+        min-height: 768px;
 
-.hero-btn{
-    justify-content:center;
-}
+        padding:
+            75px
+            8%
+            150px;
+    }
 
-.feature{
-    grid-template-columns:repeat(2,1fr);
-}
+    .hero-text {
+        width: 48%;
+    }
+
+    .hero-image {
+        width: 52%;
+    }
 
 }
 
@@ -257,57 +1197,113 @@ nav ul{
    Mobile Responsive
 ========================== */
 
-@media (max-width:768px){
+/* @media (max-width:768px) {
 
-header{
-    padding:20px;
+    .hero-bottom-content {
+        left: 4%;
+        right: 4%;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        font-size: 7px;
+
+        letter-spacing: .8px;
+
+        text-align: center;
+
+        white-space: nowrap;
+    }
+
+    .hero-bottom-content i {
+        font-size: 16px;
+    }
+} */
+
+
+@media (max-width: 768px) {
+
+    .hero {
+        min-height: auto;
+
+        padding: 55px 6% 130px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .hero-text {
+        width: 100%;
+
+        padding-bottom: 20px;
+    }
+
+
+    .hero-text h1 {
+        font-size: 48px;
+
+        letter-spacing: -1.5px;
+    }
+
+
+    .hero-text p {
+        font-size: 16px;
+
+        line-height: 1.6;
+    }
+
+
+    .hero-btn {
+        flex-wrap: wrap;
+    }
+
+
+    .hero-features {
+        flex-wrap: wrap;
+
+        gap: 15px;
+    }
+
+
+    .hero-feature {
+        margin-right: 0;
+
+        padding-right: 15px;
+    }
+
+
+    .hero-image {
+        width: 100%;
+    }
+
+
+    .hero-bottom-content {
+        left: 4%;
+        right: 4%;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        font-size: 7px;
+
+        letter-spacing: .8px;
+
+        white-space: nowrap;
+
+        text-align: center;
+    }
+
+
+    .hero-bottom-content i {
+        font-size: 16px;
+    }
 }
 
-nav ul{
-    flex-direction:column;
-    align-items:center;
-}
 
-nav ul li{
-    margin:10px 0;
-}
-
-.nav-btn{
-    margin-top:10px;
-}
-
-.hero{
-    padding:50px 20px;
-}
-
-.hero-text h1{
-    font-size:36px;
-    line-height:46px;
-}
-
-.hero-text p{
-    font-size:16px;
-}
-
-.hero-btn{
-    flex-direction:column;
-}
-
-.donor-btn,
-.request-btn{
-    width:100%;
-    text-align:center;
-}
-
-.hero-image img{
-    max-width:280px;
-}
-
-.feature{
-    grid-template-columns:1fr;
-}
-
-}
 
 
 /* ==========================
@@ -316,28 +1312,41 @@ nav ul li{
 
 @media (max-width:480px){
 
-.logo h2{
-    font-size:20px;
+    .logo h2{
+        font-size:20px;
+    }
+
+    .logo i{
+        font-size:32px;
+    }
+
+    .hero-text h1{
+        font-size:32px;
+    }
+
+    .hero-text p{
+        font-size:15px;
+        line-height:24px;
+    }
+
+    .hero-image-card{
+        width:260px;
+        height:260px;
+    }
+
+    .hero-circle{
+        width:290px;
+        height:290px;
+    }
+
+    .image-overlay{
+        left:12px;
+        right:12px;
+        bottom:12px;
+        padding:9px 12px;
+        font-size:11px;
+    }
 }
-
-.logo i{
-    font-size:32px;
-}
-
-.hero-text h1{
-    font-size:30px;
-    line-height:40px;
-}
-
-.hero-text p{
-    font-size:15px;
-}
-
-}
-
-
-
-
 
 
 
@@ -433,7 +1442,3 @@ footer p {
         line-height: 21px;
     }
 }
-
-
-
-

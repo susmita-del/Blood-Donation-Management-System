@@ -33,7 +33,7 @@
       <div class="crumb">User / <b>{% block crumb %}Dashboard{% endblock %}</b></div>
 
 
-    {% unread_notification_count request.user as unread_count %}
+      {% unread_notification_count request.user as unread_count %}
       <div class="topbar-actions">
         <a class="top-notification" href="{% url 'user_dashboard:notifications' %}" aria-label="Notifications">
           <i class="fa-regular fa-bell"></i>
@@ -50,10 +50,86 @@
         </div>
       </div>
     </header>
+
+
     <section class="content">
       {% if messages %}{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+
+      <div
+       class="session-countdown"
+       id="session-countdown-box"
+       data-remaining="{{ session_remaining|default:0 }}">
+        <span>🔐You will be automatically logged out after your session expires. Session expires in</span>
+        <strong id="session-countdown">--:--:--</strong>
+      </div>
+
+<script>
+(function () {
+    const box = document.getElementById("session-countdown-box");
+    const counter = document.getElementById("session-countdown");
+
+    if (!box || !counter) return;
+
+    let remaining = Number(box.dataset.remaining || 0);
+    let redirecting = false;
+
+    function formatTime(totalSeconds) {
+        const days = Math.floor(totalSeconds / 86400);
+
+        const hours = Math.floor(
+            (totalSeconds % 86400) / 3600
+        );
+
+        const minutes = Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+        const seconds = totalSeconds % 60;
+
+        const hh = String(hours).padStart(2, "0");
+        const mm = String(minutes).padStart(2, "0");
+        const ss = String(seconds).padStart(2, "0");
+
+        if (days > 0) {
+            return `${days}d ${hh}:${mm}:${ss}`;
+        }
+
+        return `${hh}:${mm}:${ss}`;
+    }
+
+    function expireSession() {
+        if (redirecting) return;
+
+        redirecting = true;
+
+        counter.textContent = "00:00:00";
+
+        window.location.href =
+            "{% url 'admin_panel:logout' %}?expired=session";
+    }
+
+    function updateCountdown() {
+
+        if (remaining <= 0) {
+            expireSession();
+            return;
+        }
+
+        counter.textContent =
+            formatTime(remaining);
+
+        remaining--;
+    }
+
+    updateCountdown();
+
+    window.setInterval(
+        updateCountdown,
+        1000);})();
+</script>
       {% block content %}{% endblock %}
     </section>
+
   </main>
 </div>
 </body>

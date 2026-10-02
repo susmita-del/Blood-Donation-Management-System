@@ -10,6 +10,7 @@ urlpatterns = [
     #Authentication
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    path("activity/", views.admin_activity, name="activity"),
 
     #Donors
     path("donors/", views.donors, name="donors"),

@@ -1,8 +1,11 @@
+import time
 from functools import wraps
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -27,40 +30,233 @@ def home(request):
     return redirect("admin_panel:login")
 
 
+# def login_view(request):
+#     if request.user.is_authenticated:
+#         return redirect(
+#             "admin_panel:dashboard"
+#             if request.user.is_staff
+#             else "user_dashboard:dashboard"
+#         )
+
+#     if request.method == "POST":
+#         username_or_email = request.POST.get(
+#             "username_or_email", ""
+#         ).strip()
+
+#         password = request.POST.get("password", "")
+
+#         user = authenticate(
+#             request,
+#             username=username_or_email,
+#             password=password
+#         )
+
+#         if user is None:
+#             try:
+#                 user_obj = User.objects.get(
+#                     email__iexact=username_or_email
+#                 )
+
+#                 user = authenticate(
+#                     request,
+#                     username=user_obj.username,
+#                     password=password
+#                 )
+
+#             except User.DoesNotExist:
+#                 user = None
+
+#         if user is not None:
+
+#             if not user.is_active:
+#                 messages.error(
+#                     request,
+#                     "Your account is inactive. Please contact the administrator."
+#                 )
+#                 return redirect("admin_panel:login")
+
+#             # Start login session
+#             login(request, user)
+
+#              # Normal session lifetime. These values apply to the Admin
+#             # session here; the inactivity timeout is handled separately.
+#             if user.is_staff:
+#                 if request.POST.get("remember_me"):
+#                     # 10 days
+#                     session_seconds = 15 * 24 * 60 * 60
+#                 else:
+#                     # 24 hours
+#                     session_seconds = 24 * 60 * 60
+#             else:
+#                 # Preserve the existing User-session demo behaviour.
+#                 if request.POST.get("remember_me"):
+#                     session_seconds = 10 * 24 * 60 * 60
+#                 else:
+#                     session_seconds = 1 * 60 * 60
+
+#             # Set session expiry
+#             request.session.set_expiry(session_seconds)
+
+#             # Save information for live countdown
+#             request.session["session_start"] = time.time()
+#             request.session["session_duration"] = session_seconds
+
+
+#              # Admin inactivity timer starts from the last known activity.
+#             if user.is_staff:
+#                 request.session["admin_last_activity"] = time.time()
+#             next_url = request.POST.get("next")
+
+#             if next_url and next_url.startswith("/"):
+#                 return redirect(next_url)
+
+#             return redirect(
+#                 "admin_panel:dashboard"
+#                 if user.is_staff
+#                 else "user_dashboard:dashboard"
+#             )
+
+#         messages.error(
+#             request,
+#             "Invalid username/email or password."
+#         )
+
+#         return redirect("admin_panel:login")
+
+#     return render(request, "login.html")
+
+
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("admin_panel:dashboard" if request.user.is_staff else "user_dashboard:dashboard")
+        return redirect(
+            "admin_panel:dashboard"
+            if request.user.is_staff
+            else "user_dashboard:dashboard"
+        )
 
     if request.method == "POST":
-        username_or_email = request.POST.get("username_or_email", "").strip()
+        username_or_email = request.POST.get(
+            "username_or_email", ""
+        ).strip()
+
         password = request.POST.get("password", "")
 
-        user = authenticate(request, username=username_or_email, password=password)
+        user = authenticate(
+            request,
+            username=username_or_email,
+            password=password
+        )
+
         if user is None:
             try:
-                user_obj = User.objects.get(email__iexact=username_or_email)
-                user = authenticate(request, username=user_obj.username, password=password)
+                user_obj = User.objects.get(
+                    email__iexact=username_or_email
+                )
+
+                user = authenticate(
+                    request,
+                    username=user_obj.username,
+                    password=password
+                )
+
             except User.DoesNotExist:
                 user = None
 
         if user is not None:
+
             if not user.is_active:
-                messages.error(request, "Your account is inactive. Please contact the administrator.")
+                messages.error(
+                    request,
+                    "Your account is inactive. Please contact the administrator."
+                )
                 return redirect("admin_panel:login")
+
+            # Start login session
             login(request, user)
+
+            # Normal session lifetime. These values apply to the Admin
+            # session here; the inactivity timeout is handled separately.
+            if user.is_staff:
+                if request.POST.get("remember_me"):
+                    # 10 days
+                    session_seconds = 10 * 24 * 60 * 60
+                else:
+                    # 24 hours
+                    session_seconds = 2 * 60 * 60
+            else:
+                # Preserve the existing User-session demo behaviour.
+                if request.POST.get("remember_me"):
+                    session_seconds = 5 * 24 *60 * 60
+                else:
+                    session_seconds = 1 * 60 *60
+
+            request.session.set_expiry(session_seconds)
+
+            # Normal session countdown starts at login.
+            request.session["session_start"] = time.time()
+            request.session["session_duration"] = session_seconds
+
+            # Admin inactivity timer starts from the last known activity.
+            if user.is_staff:
+                request.session["admin_last_activity"] = time.time()
+
             next_url = request.POST.get("next")
+
             if next_url and next_url.startswith("/"):
                 return redirect(next_url)
-            return redirect("admin_panel:dashboard" if user.is_staff else "user_dashboard:dashboard")
 
-        messages.error(request, "Invalid username/email or password.")
+            return redirect(
+                "admin_panel:dashboard"
+                if user.is_staff
+                else "user_dashboard:dashboard"
+            )
+
+        messages.error(
+            request,
+            "Invalid username/email or password."
+        )
+
         return redirect("admin_panel:login")
 
     return render(request, "login.html")
 
+@require_POST
+def admin_activity(request):
+    """Refresh the Admin inactivity timestamp from browser activity."""
+    if request.user.is_authenticated and request.user.is_staff:
+        request.session["admin_last_activity"] = time.time()
+        return JsonResponse({"ok": True})
+
+    return JsonResponse({"ok": False}, status=403)
+
 
 def logout_view(request):
+
+    expired = request.GET.get("expired")
+
     logout(request)
+
+    if expired == "inactivity":
+
+        messages.warning(
+            request,
+            "Your session has expired due to inactivity. Please login again."
+        )
+
+    elif expired == "session":
+
+        messages.warning(
+            request,
+            "Your session has expired. Please login again to continue."
+        )
+
+    else:
+
+        messages.success(
+            request,
+            "You have been logged out successfully."
+        )
+
     return redirect("admin_panel:login")
 
 
@@ -135,19 +331,6 @@ def donor_detail(request, pk):
     donations = donor.donations.order_by("-donation_date")
     return render(request, "donor_detail.html", {"donor": donor, "donations": donations, "active": "donors"})
 
-
-# @staff_required
-# def requests_page(request):
-#     status = request.GET.get("status", "")
-#     urgency = request.GET.get("urgency", "")
-#     qs = BloodRequest.objects.select_related("requester", "assigned_donor__user").order_by("-created_at")
-#     if status:
-#         qs = qs.filter(status=status)
-#     if urgency:
-#         qs = qs.filter(urgency=urgency)
-#     return render(request, "requests.html", {
-#         "requests": qs, "selected_status": status, "selected_urgency": urgency, "active": "requests",
-#     })
 
 @staff_required
 def requests_page(request):

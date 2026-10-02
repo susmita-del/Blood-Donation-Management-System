@@ -3,7 +3,8 @@
 <header>
     <div class="logo">
         <i class="fa-solid fa-heart-circle-plus"></i>
-        <h2>Blood Donation</h2>
+        <h2>Blood Donation <p style="font-size: 13px;font-family:'Poppins',sans-serif; " > Management System </p> </h2>
+
     </div>
 
     <nav>
@@ -17,8 +18,127 @@
         </ul>
     </nav>
 
+
+    {% if request.user.is_authenticated %}
+
+    <div class="nav-session">
+
+        <div
+            class="session-countdown"
+            id="session-countdown-box"
+            data-remaining="{{ session_remaining|default:0 }}"
+        >
+            {% comment %} <span>🔐You will be automatically logged out after your session expires. Session expires in</span> {% endcomment %}
+            <span>🔐Session expires in</span>
+            <strong id="session-countdown">--:--:--</strong>
+        </div>
+
+        <a
+            href="{% url 'admin_panel:logout' %}"
+            class="logout" id="logout-button"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
+
+    </div>
+
+{% else %}
+
     <div class="nav-btn">
         <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}" class="register">Register</a>
+        <a href="{% url 'register' %}" class="register">
+            Register
+        </a>
     </div>
+
+{% endif %}
 </header>
+
+
+
+
+{% if request.user.is_authenticated %}
+
+<script>
+(function () {
+
+    const box = document.getElementById(
+        "session-countdown-box"
+    );
+
+    const counter = document.getElementById(
+        "session-countdown"
+    );
+
+    if (!box || !counter) return;
+
+    let remaining = Number(
+        box.dataset.remaining || 0
+    );
+
+    let redirecting = false;
+
+    function formatTime(totalSeconds) {
+
+        const days = Math.floor(
+            totalSeconds / 86400
+        );
+
+        const hours = Math.floor(
+            (totalSeconds % 86400) / 3600
+        );
+
+        const minutes = Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+        const seconds = totalSeconds % 60;
+
+        const hh = String(hours).padStart(2, "0");
+        const mm = String(minutes).padStart(2, "0");
+        const ss = String(seconds).padStart(2, "0");
+
+        if (days > 0) {
+            return `${days}d ${hh}:${mm}:${ss}`;
+        }
+
+        return `${hh}:${mm}:${ss}`;
+    }
+
+    function expireSession() {
+
+        if (redirecting) return;
+
+        redirecting = true;
+
+        counter.textContent = "00:00:00";
+
+        window.location.href =
+            "{% url 'admin_panel:logout' %}?expired=session";
+    }
+
+    function updateCountdown() {
+
+        if (remaining <= 0) {
+            expireSession();
+            return;
+        }
+
+        counter.textContent =
+            formatTime(remaining);
+
+        remaining--;
+    }
+
+    updateCountdown();
+
+    window.setInterval(
+        updateCountdown,
+        1000
+    );
+
+})();
+</script>
+
+{% endif %}

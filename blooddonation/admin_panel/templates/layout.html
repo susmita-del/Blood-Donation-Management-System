@@ -26,6 +26,176 @@
 </header>
 <section class="content">
 {% if messages %}{% for message in messages %}<div class="alert {{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+
+<div
+    class="session-countdown"
+    id="normal-session-countdown-box"
+    data-remaining="{{ session_remaining|default:0 }}">
+    <span>🔐 You will be automatically logged out after your session expires. Session expires in</span>
+    <strong id="normal-session-countdown">--:--:--</strong>
+</div>
+
+
+<div
+    class="session-countdown"
+    id="inactivity-countdown-box"
+    data-remaining="{{ inactivity_remaining|default:1800 }}"
+    style="display:none;">
+    <span>⚠️ Your inactivity logout in</span>
+    <strong id="inactivity-countdown">--:--:--</strong>
+</div>
+
+
+<script>
+(function () {
+    const normalBox = document.getElementById("normal-session-countdown-box");
+    const normalCounter = document.getElementById("normal-session-countdown");
+    const inactivityBox = document.getElementById("inactivity-countdown-box");
+    const inactivityCounter = document.getElementById("inactivity-countdown");
+
+    if (!normalBox || !normalCounter || !inactivityBox || !inactivityCounter) return;
+
+    const csrfToken = "{{ csrf_token }}";
+    const inactivityLimit = 30 * 60;     // 30 minutes inactivity countdown
+    const activityDetectionDelay = 5 * 60 * 1000;  // delay before starting inactivity countdown (5 minutes)
+    const heartbeatInterval = 10000;
+
+    let normalRemaining = Number(normalBox.dataset.remaining || 0);
+    let inactivityEndsAt = null;
+    let inactivityActive = false;
+    let lastHeartbeat = 0;
+    let redirecting = false;
+    let inactivityTimer = null;
+
+    function formatTime(totalSeconds) {
+        totalSeconds = Math.max(0, Math.floor(totalSeconds));
+
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const hh = String(hours).padStart(2, "0");
+        const mm = String(minutes).padStart(2, "0");
+        const ss = String(seconds).padStart(2, "0");
+
+        if (days > 0) {
+            return `${days}d ${hh}:${mm}:${ss}`;
+        }
+
+        return `${hh}:${mm}:${ss}`;
+    }
+
+    function expireSession(type) {
+        if (redirecting) return;
+
+        redirecting = true;
+
+        if (type === "inactivity") {
+            inactivityCounter.textContent = "00:00:00";
+            window.location.href = "{% url 'admin_panel:logout' %}?expired=inactivity";
+        } else {
+            normalCounter.textContent = "00:00:00";
+            window.location.href = "{% url 'admin_panel:logout' %}?expired=session";
+        }
+    }
+
+    function showInactivityCountdown() {
+        if (inactivityActive || redirecting) return;
+
+        inactivityActive = true;
+        inactivityEndsAt = Date.now() + (inactivityLimit * 1000);
+        inactivityBox.style.display = "flex";
+    }
+
+    function resetInactivityCountdown() {
+        if (redirecting) return;
+
+        inactivityActive = false;
+        inactivityEndsAt = null;
+        inactivityBox.style.display = "none";
+        inactivityCounter.textContent = formatTime(inactivityLimit);
+    }
+
+    function sendActivityHeartbeat(force = false) {
+        const now = Date.now();
+
+        if (!force && now - lastHeartbeat < heartbeatInterval) {
+            return;
+        }
+
+        lastHeartbeat = now;
+
+        fetch("{% url 'admin_panel:activity' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            credentials: "same-origin"
+        }).catch(function () {
+            // Normal page requests are still handled by the middleware.
+        });
+    }
+
+    function registerActivity() {
+        resetInactivityCountdown();
+        sendActivityHeartbeat();
+
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(
+            showInactivityCountdown,
+            activityDetectionDelay
+        );
+    }
+
+    function updateCountdowns() {
+        if (redirecting) return;
+
+        if (normalRemaining <= 0) {
+            expireSession("session");
+            return;
+        }
+
+        normalCounter.textContent = formatTime(normalRemaining);
+        normalRemaining--;
+
+        if (inactivityActive && inactivityEndsAt !== null) {
+            const inactivityRemaining = Math.ceil(
+                (inactivityEndsAt - Date.now()) / 1000
+            );
+
+            if (inactivityRemaining <= 0) {
+                expireSession("inactivity");
+                return;
+            }
+
+            inactivityCounter.textContent = formatTime(inactivityRemaining);
+        }
+    }
+
+    // Start with the normal session countdown visible.
+    normalCounter.textContent = formatTime(normalRemaining);
+    resetInactivityCountdown();
+
+    // Detect Admin activity in the browser.
+    ["mousemove", "mousedown", "keydown", "scroll", "touchstart", "click"].forEach(function (eventName) {
+        window.addEventListener(eventName, registerActivity, { passive: true });
+    });
+
+    // Keep the server-side inactivity timestamp fresh while the Admin is active.
+    sendActivityHeartbeat(true);
+
+    // If there is no activity after the initial delay, start the inactivity countdown.
+    inactivityTimer = setTimeout(
+        showInactivityCountdown,
+        activityDetectionDelay
+    );
+
+    window.setInterval(updateCountdowns, 1000);
+})();
+</script>
+
 {% block content %}{% endblock %}
 </section>
 </main>

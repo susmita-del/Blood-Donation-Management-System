@@ -14,6 +14,20 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .card-link h3,
+    .card-link p {
+        text-decoration: none;
+    }
+</style>
+
 </head>
 
 <body>
@@ -23,7 +37,7 @@
 
     
 
-    <section class="hero">
+    {% comment %} <section class="hero">
 
         <div class="hero-text">
 
@@ -40,9 +54,7 @@
             <div class="hero-btn">
 
                <a href="{% url 'become_a_donor' %}" class="donor-btn">Become a Donor</a>
-               <a href="{% url 'request_blood' %}" class="request-btn">
-  Request Blood
-</a>
+               <a href="{% url 'request_blood' %}" class="request-btn">Request Blood</a>
 
             </div>
 
@@ -55,12 +67,124 @@
 
         </div>
 
-    </section>
+    </section> {% endcomment %}
+
+
+<section class="hero">
+
+    <div class="hero-bg-circle hero-bg-circle-one"></div>
+    <div class="hero-bg-circle hero-bg-circle-two"></div>
+    
+
+     {% comment %} BOTTOM WAVES {% endcomment %}
+     
+    <div class="hero-wave wave-back"></div>
+    {% comment %} <div class="hero-wave wave-front"></div> {% endcomment %}
+
+
+    
+
+
+    <div class="hero-text">
+
+        <div class="hero-tag">
+            <i class="fa-solid fa-heart-pulse"></i>
+            GIVE BLOOD &nbsp;•&nbsp; GIVE HOPE &nbsp;•&nbsp; GIVE LIFE
+        </div>
+
+        <div class="hero-heading-line"></div>
+
+        <h1>
+            Donate <span>Blood</span><br>
+            Save <span>Lives</span>
+        </h1>
+
+        <p>
+            Every drop of blood is a gift of life.
+            Your one donation can save many lives.
+        </p>
+
+        <div class="hero-btn">
+
+            <a href="{% url 'become_a_donor' %}" class="donor-btn">
+                <i class="fa-solid fa-heart"></i>
+                Become a Donor 
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+            <a href="{% url 'request_blood' %}" class="request-btn">
+                Request Blood
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+        </div>
+
+        <div class="hero-features">
+
+            <div class="hero-feature">
+                <i class="fa-solid fa-droplet"></i>
+                <span>
+                    Help<br>
+                    Patients
+                </span>
+            </div>
+
+            <div class="hero-feature">
+                <i class="fa-solid fa-users"></i>
+                <span>
+                    Build a<br>
+                    Healthier Community
+                </span>
+            </div>
+
+            <div class="hero-feature">
+                <i class="fa-solid fa-heart"></i>
+                <span>
+                    Be a<br>
+                    Life Saver
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    
+
+    <div class="hero-image">
+
+    <div class="hero-circle"></div>
+
+    <div class="hero-image-card">
+
+        <img src="{% static 'images/images.jpg' %}"
+             alt="Blood Donation">
+
+    </div>
+
+    <!-- KEEP THESE ANIMATIONS -->
+
+    <div class="floating-icon floating-drop">
+        <i class="fa-solid fa-droplet"></i>
+    </div>
+
+    <div class="floating-icon floating-heart">
+        <i class="fa-solid fa-heart"></i>
+    </div>
+
+    <div class="ecg-line">
+        <span></span>
+    </div>
+
+</div>
+
+</section>
 
 
     <section class="feature">
 
         <div class="card">
+          <a href="{% url 'doner' %}" class="card-link">
             <i class="fa-solid fa-users"></i>
 
             <h3>Find Donor</h3>
@@ -68,10 +192,12 @@
             <p>
                 Search blood donors according to your blood group.
             </p>
+          </a>
         </div>
 
 
         <div class="card">
+          <a href="{% url 'request_blood' %}" class="card-link">
             <i class="fa-solid fa-droplet"></i>
 
             <h3>Request Blood</h3>
@@ -79,6 +205,7 @@
             <p>
                 Send blood request during emergency situations.
             </p>
+          </a>
         </div>
 
 

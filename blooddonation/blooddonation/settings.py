@@ -45,6 +45,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'admin_panel.middleware.AdminAutoLogoutMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -61,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'system.context_processors.session_countdown',
             ],
         },
     },
@@ -139,8 +141,25 @@ LOGOUT_REDIRECT_URL = "/login/"
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT= 587
-EMAIL_HOST_USER="susmitapanjabca23@gmail.com"
-EMAIL_HOST_PASSWORD="fxejivxuxwxuetvz"
+
+
+EMAIL_HOST_USER="foreverything441@gmail.com"
+EMAIL_HOST_PASSWORD="uvgcefgirypdtnlr"
 DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
 EMAIL_USE_TLS= True
 
+
+
+# Session will remain until timeout
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Session timeout: 10 minutes
+# SESSION_COOKIE_AGE = 10 * 60
+# SESSION_COOKIE_AGE = 86400
+
+# (After every request - Rolling Session/sliding session)
+# SESSION_SAVE_EVERY_REQUEST = True
+
+# On cookie security for protection, you can set the following settings based on your requirements:
+SESSION_COOKIE_SECURE = False  # send session cookie only over HTTPS
+SESSION_COOKIE_HTTPONLY = True  # prevent XSS attacks by making the cookie inaccessible to JavaScript
